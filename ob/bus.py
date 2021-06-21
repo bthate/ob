@@ -2,7 +2,7 @@
 
 "object handler"
 
-from obj import Object
+from .obj import Object
 
 class Bus(Object):
 

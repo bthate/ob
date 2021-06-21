@@ -25,15 +25,14 @@ def read():
 
 setup(
     name='ob',
-    version='100',
+    version='101',
     description="python3 object library",
     author='Bart Thate',
     author_email='bthate67@gmail.com', 
     url='https://github.com/bthate67/ob',
     long_description=read(),
     license='Public Domain',
-    package_dir={'': 'ob'},
-    py_modules=mods("ob"),
+    packages=["ob"],
     zip_safe=True,
     scripts=["bin/ob"],
     classifiers=['Development Status :: 3 - Alpha',

@@ -1,19 +1,14 @@
 # This file is placed in the Public Domain.
 
-"find"
-
 import time
 
-from dbs import find, listfiles, fntime
-from prs import elapsed
-from obj import cfg, fmt
-from tbl import Table
+from .dbs import find, listfiles, fntime
+from .prs import elapsed
+from .obj import cfg, fmt
+from .tbl import Table
 
 def __dir__():
-    return ("fnd", "register")
-
-def register(k):
-    k.addcmd(fnd)
+    return ("fnd", )
 
 def fnd(event):
     if not event.args:

@@ -1,8 +1,6 @@
 # This is file is placed in Public Domain.
 
-"commands"
-
-from tbl import Table
+from .tbl import Table
 
 def __dir__():
     return ("cmd",)
