@@ -1,7 +1,5 @@
 # This file is placed in the Public Domain.
 
-"object library"
-
 import datetime
 import json as js
 import os

@@ -1,16 +1,14 @@
 # This file is placed in the Public Domain.
 
-"tables (tbl)"
-
 import builtins
 import inspect
 import importlib
 import os
 import sys
 
-from dft import Default
-from err import NoClass
-from obj import Object
+from .dft import Default
+from .err import NoClass
+from .obj import Object
 
 def __dir__():
     return ('Table',)

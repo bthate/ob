@@ -3,13 +3,13 @@
 import queue
 import threading
 
-from bus import Bus
-from err import Restart, Stop
-from evt import Command, Event
-from obj import Object
-from tbl import Table
-from thr import launch
-from trc import get_exception
+from .bus import Bus
+from .err import Restart, Stop
+from .evt import Command, Event
+from .obj import Object
+from .tbl import Table
+from .thr import launch
+from .trc import get_exception
 
 class Handler(Object):
 

@@ -1,17 +1,10 @@
 # This file is in the Public Domain.
 
-"todo"
-
-from dbs import find
-from obj import Object
+from .dbs import find
+from .obj import Object
 
 def __dir__():
-    return ("Todo", "dne", "register", "tdo")
-
-def register(k):
-    k.addcmd(dne)
-    k.addcmd(tdo)
-    k.addcls(Todo)
+    return ("Todo", "dne", "tdo")
 
 class Todo(Object):
 

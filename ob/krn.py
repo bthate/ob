@@ -9,11 +9,11 @@ import pwd
 import sys
 import time
 
-from dft import Default
-from obj import Object, spl
-from prs import parse_txt
-from hdl import Handler
-from tbl import Table, builtin
+from .dft import Default
+from .obj import Object, spl
+from .prs import parse_txt
+from .hdl import Handler
+from .tbl import Table, builtin
 
 def __dir__():
     return ('Cfg', 'Kernel')

@@ -3,10 +3,10 @@
 import threading
 import time
 
-from bus import Bus
-from prs import elapsed
-from krn import Kernel
-from obj import Object, edit, fmt, getname
+from .bus import Bus
+from .prs import elapsed
+from .krn import Kernel
+from .obj import Object, edit, fmt, getname
 
 def __dir__():
     return ("flt", "krn", "register", "thr", "upt")

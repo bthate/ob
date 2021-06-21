@@ -6,16 +6,14 @@ import os
 import sys
 import termios
 
-sys.path.insert(0, "ob")
-
-from bus import Bus
-from clt import Client
-from err import Restart
-from hdl import Handler
-from krn import Kernel, getdir
-from obj import cfg
-from tbl import Table
-from ver import __version__
+from ob.bus import Bus
+from ob.clt import Client
+from ob.err import Restart
+from ob.hdl import Handler
+from ob.krn import Kernel, getdir
+from ob.obj import cfg
+from ob.tbl import Table
+from ob.ver import __version__
 
 name = "ob"
 resume = {}
