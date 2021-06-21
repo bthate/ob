@@ -2,6 +2,7 @@
 # This file is placed in the Public Domain.
 
 import atexit
+import om
 import os
 import sys
 import termios
@@ -50,6 +51,7 @@ def main():
     k = Kernel()
     k.boot(name, cfg.version)
     k.start()
+    k.scan(om)
     c = CLI()
     return c.cmd(k.cfg.otxt)
 
