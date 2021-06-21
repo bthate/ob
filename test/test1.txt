@@ -1,6 +1,6 @@
 # basic set
 
->>> from obj import Object
+>>> from ob.obj import Object
 >>> o = Object()
 >>> o.set("key", "value")
 >>> o.key
@@ -8,7 +8,7 @@
 
 # attribute set
 
->>> from obj import Object
+>>> from ob.obj import Object
 >>> o = Object()
 >>> o.key = "value"
 >>> o.key
@@ -16,13 +16,13 @@
 
 # save/load
 
->>> from obj import Object, cfg
+>>> from ob.obj import Object, cfg
 >>> cfg.wd = ".test"
 >>> o = Object()
 >>> o["key"] = "value"
 >>> p = o.save()
 >>> p
-'obj.Object/...
+'ob.obj.Object/...
 >>> oo = Object()
 >>> oo.load(p)
 {"key": "value"}

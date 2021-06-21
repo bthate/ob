@@ -3,8 +3,8 @@
 import os
 import unittest
 
-from dbs import find, last
-from obj import O, Object, gettype, merge
+from ob.dbs import find, last
+from ob.obj import O, Object, gettype, merge
 
 class Test_Object(unittest.TestCase):
 
@@ -105,11 +105,11 @@ class Test_Object(unittest.TestCase):
         o.bla = "test"
         o.save()
         oo = Object()
-        last(oo)
+        p = last(oo)
         oo.bla = "mekker"
         oo.save()
         ooo = Object()
-        last(ooo)
+        p = last(ooo)
         self.assertEqual(ooo.bla, "mekker")
 
     def test_merge(self):

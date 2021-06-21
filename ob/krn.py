@@ -108,8 +108,10 @@ class Kernel(Handler):
         for mn in pkgutil.walk_packages([path,]):
             if mn[1] == "tbl":
                 continue
-            zip = mn[0].find_module(mn[1])
-            mod = zip.load_module(mn[1])
+            #zip = mn[0].find_module(mn[1])
+            #mod = zip.load_module(mn[1])
+            file = mn[0].find_module(mn[1])
+            mod = file.load_module(mn[1])
             builtin(mod)
 
     @staticmethod

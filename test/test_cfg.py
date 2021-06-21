@@ -2,9 +2,9 @@
 
 import unittest
 
-from dft import Default
-from obj import edit
-from prs import parse_txt
+from ob.dft import Default
+from ob.obj import edit
+from ob.prs import parse_txt
 
 cfg = Default()
 

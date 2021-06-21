@@ -1,7 +1,5 @@
 # This file is placed in the Public Domain.
 
-"object library"
-
 import datetime
 import json as js
 import os
@@ -48,7 +46,7 @@ class O:
         return repr(oo)
 
     def __dorepr__(self):
-        return '<%s.%s object at %s>' % (
+        return '<ob.%s.%s object at %s>' % (
             self.__class__.__module__,
             self.__class__.__name__,
             hex(id(self))

@@ -34,7 +34,7 @@ class Table(Object):
         n = clz.__name__.lower()
         if n not in Table.names:
             Table.names[n] = []
-        nn = "%s.%s" % (clz.__module__, clz.__name__)
+        nn = "ob.%s.%s" % (clz.__module__, clz.__name__)
         if nn not in Table.names[n]:
             Table.names[n].append(nn)
 
@@ -90,7 +90,7 @@ def builtin(mod):
 def find_cls(mod):
     res = {}
     for key, o in inspect.getmembers(mod, inspect.isclass):
-        res[o.__name__] = o
+        res["ob.%s" % o.__name__] = o
     return res
 
 def find_cmd(mod):

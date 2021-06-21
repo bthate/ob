@@ -87,7 +87,7 @@ repository (as user)::
  $ git clone http://github.com/bthate67/ob
  $ cd ob
 
-to program your own commands, open olib/hlo.py (new file) and add the following
+to program your own commands, open ob/hlo.py (new file) and add the following
 code::
  
     def hlo(event):

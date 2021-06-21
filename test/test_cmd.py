@@ -3,8 +3,9 @@
 import random
 import unittest
 
-from bot.bus import Bus, first
-from bot.krn import Kernel
+from ob.bus import Bus, first
+from ob.krn import Kernel
+from ob.tbl import Table
 
 from prm import param
 
@@ -32,10 +33,10 @@ def consume():
 
 def exec():
     c = first()
-    l = list(Kernel.modules)
+    l = list(Table.modules)
     random.shuffle(l)
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
             e = c.event(cmd + " " + ex)
-            c.put(e)
+            c.dispatch(Kernel, e)
             events.append(e)

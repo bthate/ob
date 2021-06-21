@@ -4,6 +4,7 @@
 import os, sys ; sys.path.insert(0, os.getcwd())
 
 from ob.bus import Bus
+from ob.clt import Client
 from ob.hdl import Handler
 from ob.krn import Kernel
 from ob.obj import cfg
@@ -17,7 +18,7 @@ import unittest
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
 resume = {}
 
-class Test(Handler):
+class Test(Client):
 
     def raw(self, txt):
         if Kernel.opts("v"):
@@ -56,11 +57,10 @@ def main():
     cfg.debug = True
     cfg.version = 101
     cfg.wd = ".test"
+    c = Test()
     k = Kernel()
     k.parse()
     k.boot("test", cfg.version)
-    k.scan("ob")
-    Bus.add(k)
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)
