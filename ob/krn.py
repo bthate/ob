@@ -2,18 +2,17 @@
 
 import getpass
 import importlib
-import obj
 import os
 import pkgutil
 import pwd
 import sys
 import time
 
-from .dft import Default
-from .obj import Object, spl
-from .prs import parse_txt
-from .hdl import Handler
-from .tbl import Table, builtin
+from ob.dft import Default
+from ob.obj import Object, cdir, cfg, spl
+from ob.prs import parse_txt
+from ob.hdl import Handler
+from ob.tbl import Table, builtin
 
 def __dir__():
     return ('Cfg', 'Kernel')
@@ -34,8 +33,8 @@ class Kernel(Handler):
         Kernel.cfg.mods += "," + mns
         Kernel.cfg.version = version
         Kernel.cfg.update(Kernel.cfg.sets)
-        Kernel.cfg.wd = obj.cfg.wd = Kernel.cfg.wd or obj.cfg.wd
-        obj.cdir(Kernel.cfg.wd + os.sep)
+        Kernel.cfg.wd = cfg.wd = Kernel.cfg.wd or cfg.wd
+        cdir(Kernel.cfg.wd + os.sep)
         try:
             pwn = pwd.getpwnam(name)
         except KeyError:

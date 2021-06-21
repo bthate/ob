@@ -6,9 +6,9 @@ import importlib
 import os
 import sys
 
-from .dft import Default
-from .err import NoClass
-from .obj import Object
+from ob.dft import Default
+from ob.err import NoClass
+from ob.obj import Object
 
 def __dir__():
     return ('Table',)

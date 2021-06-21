@@ -1,7 +1,7 @@
 # This file is in the Public Domain.
 
-from .dbs import find
-from .obj import Object
+from ob.dbs import find
+from ob.obj import Object
 
 def __dir__():
     return ("Todo", "dne", "tdo")

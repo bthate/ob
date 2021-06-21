@@ -3,10 +3,10 @@
 import queue
 import threading
 
-from .bus import Bus
-from .krn import Kernel
-from .obj import Object
-from .thr import launch
+from ob.bus import Bus
+from ob.krn import Kernel
+from ob.obj import Object
+from ob.thr import launch
 
 class Client(Object):
 

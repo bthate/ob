@@ -2,10 +2,10 @@
 
 import time
 
-from .dbs import find, listfiles, fntime
-from .prs import elapsed
-from .obj import cfg, fmt
-from .tbl import Table
+from ob.dbs import find, listfiles, fntime
+from ob.prs import elapsed
+from ob.obj import cfg, fmt
+from ob.tbl import Table
 
 def __dir__():
     return ("fnd", )

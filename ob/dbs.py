@@ -3,8 +3,8 @@
 import os
 import time
 
-from .obj import cfg, gettype, search
-from .tbl import Table
+from ob.obj import cfg, gettype, search
+from ob.tbl import Table
 
 def all(otype, selector=None, index=None, timed=None):
     nr = -1

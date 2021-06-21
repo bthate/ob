@@ -3,8 +3,8 @@
 import threading
 import time
 
-from .obj import Object
-from .thr import launch, getname
+from ob.obj import Object
+from ob.thr import launch, getname
 
 class Timer(Object):
 

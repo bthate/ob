@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 
-from .obj import Object
+from ob.obj import Object
 
 class List(Object):
 
