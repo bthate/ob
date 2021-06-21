@@ -3,9 +3,9 @@
 import queue
 import threading
 
-from ob.lst import List
-from ob.obj import Object
-from ob.thr import launch
+from lst import List
+from obj import Object
+from thr import launch
 
 class Output(Object):
 

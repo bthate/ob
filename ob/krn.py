@@ -2,17 +2,18 @@
 
 import getpass
 import importlib
+import obj
 import os
 import pkgutil
 import pwd
 import sys
 import time
 
-from ob.dft import Default
-from ob.obj import Object, cdir, cfg, spl
-from ob.prs import parse_txt
-from ob.hdl import Handler
-from ob.tbl import Table, builtin
+from dft import Default
+from obj import Object, spl
+from prs import parse_txt
+from hdl import Handler
+from tbl import Table, builtin
 
 def __dir__():
     return ('Cfg', 'Kernel')
@@ -33,8 +34,8 @@ class Kernel(Handler):
         Kernel.cfg.mods += "," + mns
         Kernel.cfg.version = version
         Kernel.cfg.update(Kernel.cfg.sets)
-        Kernel.cfg.wd = cfg.wd = Kernel.cfg.wd or cfg.wd
-        cdir(Kernel.cfg.wd + os.sep)
+        Kernel.cfg.wd = obj.cfg.wd = Kernel.cfg.wd or obj.cfg.wd
+        obj.cdir(Kernel.cfg.wd + os.sep)
         try:
             pwn = pwd.getpwnam(name)
         except KeyError:
@@ -48,7 +49,7 @@ class Kernel(Handler):
         except PermissionError:
             pass
         Kernel.privileges()
-        Kernel.scan("ob.ver")
+        Kernel.scan("obj")
 
     @staticmethod
     def init(mns):
@@ -98,20 +99,14 @@ class Kernel(Handler):
         return True
 
     @staticmethod
-    def say(channel, txt):
-        pass
-
-    @staticmethod
     def scan(mn):
         mod = __import__(mn)
         path = getdir(mod)
         for mn in pkgutil.walk_packages([path,]):
             if mn[1] == "tbl":
                 continue
-            #zip = mn[0].find_module(mn[1])
-            #mod = zip.load_module(mn[1])
-            file = mn[0].find_module(mn[1])
-            mod = file.load_module(mn[1])
+            zip = mn[0].find_module(mn[1])
+            mod = zip.load_module(mn[1])
             builtin(mod)
 
     @staticmethod
@@ -120,4 +115,7 @@ class Kernel(Handler):
             time.sleep(5.0)
 
 def getdir(mod):
-    return mod.__path__[0]
+    try:
+        return os.path.dirname(mod.__file__)
+    except AttributeError:
+        return mod.__path__[0]

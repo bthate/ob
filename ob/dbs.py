@@ -3,16 +3,14 @@
 import os
 import time
 
-from ob.err import NoType
-from ob.obj import cfg, gettype, search
-from ob.tbl import Table
+from obj import cfg, gettype, search
+from tbl import Table
 
-import ob.obj
-
-def all(otypes, selector=None, index=None, timed=None):
+def all(otype, selector=None, index=None, timed=None):
     nr = -1
     if selector is None:
         selector = {}
+    otypes = Table.getnames(otype, [])
     for t in otypes:
         for fn in fns(t, timed):
             o = hook(fn)
@@ -71,8 +69,7 @@ def find(otypes, selector=None, index=None, timed=None):
         return (None, None)
 
 def last(o):
-    t = gettype(o)
-    path, l = lastfn(t)
+    path, l = lastfn(str(gettype(o)))
     if  l:
         o.update(l)
     if path:
@@ -101,7 +98,7 @@ def lastfn(otype):
 def fns(name, timed=None):
     if not name:
         return []
-    p = os.path.join(ob.obj.cfg.wd, "store", name) + os.sep
+    p = os.path.join(cfg.wd, "store", name) + os.sep
     res = []
     d = ""
     for rootdir, dirs, _files in os.walk(p, topdown=False):
@@ -142,12 +139,12 @@ def hook(hfn):
     fn = os.sep.join(oname)
     t = Table.getcls(cname)
     if not t:
-        raise NoType(cname)
+        raise NoTypeError(cname)
     if fn:
         o = t()
         o.load(fn)
         return o
-    raise NoType(cname)
+    raise NoTypeError(cname)
 
 def listfiles(wd):
     path = os.path.join(wd, "store")

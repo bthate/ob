@@ -2,6 +2,8 @@
 
 from setuptools import setup, os
 
+d = os.path.join(os.getcwd(), "ob")
+
 def files(name):
     res = []
     for p in os.listdir(name):
@@ -13,7 +15,7 @@ def files(name):
 
 def mods(name):
     res = []
-    for p in os.listdir(name):
+    for p in os.listdir(d):
         if p.startswith("__"):
             continue
         if p.endswith(".py"):
@@ -32,9 +34,9 @@ setup(
     url='https://github.com/bthate67/ob',
     long_description=read(),
     license='Public Domain',
-    packages=["ob"],
-    namespace_packages=["ob"],
-    zip_safe=False,
+    package_dir={'': 'ob'},
+    py_modules=mods("ob"),
+    zip_safe=True,
     scripts=["bin/ob"],
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: Public Domain',

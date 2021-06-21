@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
-from ob.dft import Default
-from ob.obj import Object
+from dft import Default
+from obj import Object
 
 import datetime
 

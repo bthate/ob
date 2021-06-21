@@ -1,6 +1,8 @@
 # This file is placed in the Public Domain.
 
-from ob.obj import Object
+"object handler"
+
+from obj import Object
 
 class Bus(Object):
 

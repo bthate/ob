@@ -1,5 +1,7 @@
 # This file is placed in the Public Domain.
 
+"object library"
+
 import datetime
 import json as js
 import os
@@ -46,7 +48,7 @@ class O:
         return repr(oo)
 
     def __dorepr__(self):
-        return '<ob.%s.%s object at %s>' % (
+        return '<%s.%s object at %s>' % (
             self.__class__.__module__,
             self.__class__.__name__,
             hex(id(self))
@@ -150,7 +152,7 @@ class Object(Obj):
 
 cfg = Object()
 cfg.debug = False
-cfg.wd = ".obdata"
+cfg.wd = ".olib"
 
 def edit(o, setter, skip=False):
     count = 0

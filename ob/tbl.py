@@ -1,14 +1,16 @@
 # This file is placed in the Public Domain.
 
+"tables (tbl)"
+
 import builtins
 import inspect
 import importlib
 import os
 import sys
 
-from ob.dft import Default
-from ob.err import NoClass
-from ob.obj import Object
+from dft import Default
+from err import NoClass
+from obj import Object
 
 def __dir__():
     return ('Table',)
@@ -34,7 +36,7 @@ class Table(Object):
         n = clz.__name__.lower()
         if n not in Table.names:
             Table.names[n] = []
-        nn = "ob.%s.%s" % (clz.__module__, clz.__name__)
+        nn = "%s.%s" % (clz.__module__, clz.__name__)
         if nn not in Table.names[n]:
             Table.names[n].append(nn)
 
@@ -90,7 +92,7 @@ def builtin(mod):
 def find_cls(mod):
     res = {}
     for key, o in inspect.getmembers(mod, inspect.isclass):
-        res["ob.%s" % o.__name__] = o
+        res[o.__name__] = o
     return res
 
 def find_cmd(mod):
