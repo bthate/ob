@@ -2,7 +2,7 @@
 
 import getpass
 import importlib
-import obj
+import ob
 import os
 import pkgutil
 import pwd
@@ -10,7 +10,7 @@ import sys
 import time
 
 from .dft import Default
-from .obj import Object, spl
+from .obj import Object, cdir, cfg, spl
 from .prs import parse_txt
 from .hdl import Handler
 from .tbl import Table, builtin
@@ -34,8 +34,8 @@ class Kernel(Handler):
         Kernel.cfg.mods += "," + mns
         Kernel.cfg.version = version
         Kernel.cfg.update(Kernel.cfg.sets)
-        Kernel.cfg.wd = obj.cfg.wd = Kernel.cfg.wd or obj.cfg.wd
-        obj.cdir(Kernel.cfg.wd + os.sep)
+        Kernel.cfg.wd = cfg.wd = Kernel.cfg.wd or cfg.wd
+        cdir(Kernel.cfg.wd + os.sep)
         try:
             pwn = pwd.getpwnam(name)
         except KeyError:
@@ -49,7 +49,7 @@ class Kernel(Handler):
         except PermissionError:
             pass
         Kernel.privileges()
-        Kernel.scan("obj")
+        Kernel.scan(ob)
 
     @staticmethod
     def init(mns):
@@ -99,11 +99,9 @@ class Kernel(Handler):
         return True
 
     @staticmethod
-    def scan(mn):
-        mod = __import__(mn)
-        path = getdir(mod)
-        for mn in pkgutil.walk_packages([path,]):
-            if mn[1] == "tbl":
+    def scan(mod):
+        for mn in pkgutil.walk_packages(mod.__path__, mod.__package__+"."):
+            if mn[1] == "ob.tbl":
                 continue
             zip = mn[0].find_module(mn[1])
             mod = zip.load_module(mn[1])
@@ -115,7 +113,4 @@ class Kernel(Handler):
             time.sleep(5.0)
 
 def getdir(mod):
-    try:
-        return os.path.dirname(mod.__file__)
-    except AttributeError:
-        return mod.__path__[0]
+    return mod.__path__[0]

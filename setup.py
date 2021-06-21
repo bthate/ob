@@ -1,26 +1,6 @@
 # This file is place in the Public Domain.
 
-from setuptools import setup, os
-
-d = os.path.join(os.getcwd(), "ob")
-
-def files(name):
-    res = []
-    for p in os.listdir(name):
-        if p.startswith("__"):
-            continue
-        if p.endswith(".py"):
-            res.append(os.path.join(name, p))
-    return res
-
-def mods(name):
-    res = []
-    for p in os.listdir(d):
-        if p.startswith("__"):
-            continue
-        if p.endswith(".py"):
-            res.append(p[:-3])
-    return res
+from setuptools import setup
 
 def read():
     return open("README.rst", "r").read()
@@ -31,12 +11,10 @@ setup(
     description="python3 object library",
     author='Bart Thate',
     author_email='bthate67@gmail.com', 
-    url='https://github.com/bthate67/ob',
+    url='https://github.com/bthate/ob',
     long_description=read(),
     license='Public Domain',
     packages=["ob"],
-    #package_dir={'': 'ob'},
-    #py_modules=mods("ob"),
     zip_safe=True,
     scripts=["bin/ob"],
     classifiers=['Development Status :: 3 - Alpha',
