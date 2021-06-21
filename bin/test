@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-__version__ = 100
+import os, sys ; sys.path.insert(0, os.getcwd())
 
-import os, sys ; sys.path.insert(0, "ob")
+from ob.bus import Bus
+from ob.hdl import Handler
+from ob.krn import Kernel
+from ob.obj import cfg
 
-from bus import Bus
-from hdl import Handler
-from krn import Kernel
-from obj import cfg
-
+import atexit
 import doctest
 import shutil
+import termios
 import unittest
 
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
+resume = {}
 
 class Test(Handler):
 
@@ -22,11 +23,28 @@ class Test(Handler):
         if Kernel.opts("v"):
             print(txt)
 
+def termsetup(fd):
+    return termios.tcgetattr(fd)
+
+def termreset():
+    if "old" in resume:
+        try:
+            termios.tcsetattr(resume["fd"], termios.TCSADRAIN, resume["old"])
+        except termios.error:
+            pass
+
+def termsave():
+    try:
+        resume["fd"] = sys.stdin.fileno()
+        resume["old"] = termsetup(sys.stdin.fileno())
+        atexit.register(termreset)
+    except termios.error:
+        pass
+
 def wrap(func):
+    termsave()
     try:
         func()
-    except PermissionError as ex:
-        cprint(str(ex))
     except KeyboardInterrupt:
         pass
     finally:
@@ -36,10 +54,11 @@ def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
     cfg.debug = True
+    cfg.version = 101
     cfg.wd = ".test"
     k = Kernel()
     k.parse()
-    k.boot("test", __version__)
+    k.boot("test", cfg.version)
     k.scan("ob")
     Bus.add(k)
     pat = "test_%s*" % "*"

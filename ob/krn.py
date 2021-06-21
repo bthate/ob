@@ -48,7 +48,7 @@ class Kernel(Handler):
         except PermissionError:
             pass
         Kernel.privileges()
-        Kernel.scan("ob")
+        Kernel.scan("ob.ver")
 
     @staticmethod
     def init(mns):
@@ -114,7 +114,4 @@ class Kernel(Handler):
             time.sleep(5.0)
 
 def getdir(mod):
-    try:
-        return os.path.dirname(mod.__file__)
-    except AttributeError:
-        return mod.__path__[0]
+    return mod.__path__[0]

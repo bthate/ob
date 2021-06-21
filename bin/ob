@@ -13,6 +13,7 @@ from ob.hdl import Handler
 from ob.krn import Kernel, getdir
 from ob.obj import cfg
 from ob.tbl import Table
+from ob.ver import __version__
 
 name = "ob"
 resume = {}
@@ -42,13 +43,13 @@ def ver(event):
     event.reply("%s %s" % (Kernel.cfg.name.upper(), Kernel.cfg.version))
 
 def main():
-    cfg.version = 101
+    cfg.version = __version__
     cfg.wd = os.path.expanduser("~/.obdata")
     Table.addcmd(rse)
     Table.addcmd(ver)
     k = Kernel()
     k.boot(name, cfg.version)
-    k.scan("ob")
+    k.scan("ob.ver")
     k.start()
     c = CLI()
     return c.cmd(k.cfg.otxt)

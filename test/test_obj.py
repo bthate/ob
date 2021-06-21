@@ -26,7 +26,7 @@ class Test_Object(unittest.TestCase):
 
     def test_json(self):
         o = Object()
-        self.assertTrue("<obj.Object" in o.__dorepr__())
+        self.assertTrue("<ob.obj.Object" in o.__dorepr__())
 
     def test_intern4(self):
         o = Object()
