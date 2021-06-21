@@ -4,11 +4,11 @@ import random
 import sys
 import unittest
 
-from bus import first
-from evt import Command
-from tbl import Table
-from thr import launch
-from krn import Kernel
+from ob.bus import first
+from ob.evt import Command
+from ob.tbl import Table
+from ob.thr import launch
+from ob.krn import Kernel
 
 from prm import param
 

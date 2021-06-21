@@ -98,6 +98,10 @@ class Kernel(Handler):
         return True
 
     @staticmethod
+    def say(channel, txt):
+        pass
+
+    @staticmethod
     def scan(mn):
         mod = __import__(mn)
         path = getdir(mod)

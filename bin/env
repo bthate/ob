@@ -12,8 +12,7 @@ def main():
     open("bin/clean")
     open("python3 setup.py sdist")
     open("python3 -mvenv env")
-    open("env/bin/python3 env/bin/pip3 install -f dist olib --force-reinstall")
-    open("cp bin/obot env/bin")
+    open("env/bin/python3 env/bin/pip3 install -f dist ob --force-reinstall")
 
 if __name__ == "__main__":
     main()
