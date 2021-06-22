@@ -49,7 +49,7 @@ class Kernel(Handler):
         except PermissionError:
             pass
         Kernel.privileges()
-        Kernel.scan(ob)
+        Kernel.scan("ob")
 
     @staticmethod
     def init(mns):
@@ -99,7 +99,11 @@ class Kernel(Handler):
         return True
 
     @staticmethod
-    def scan(mod):
+    def scan(mn):
+        try:
+            mod = __import__(mn)
+        except ModuleNotFoundError:
+            return
         for mn in pkgutil.walk_packages(mod.__path__, mod.__package__+"."):
             if mn[1] == "ob.tbl":
                 continue
