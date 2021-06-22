@@ -40,8 +40,6 @@ class Handler(Object):
         pass
 
     def event(self, txt):
-        if txt is None:
-            return txt
         c = Command()
         c.txt = txt or ""
         c.orig = self.__dorepr__()

@@ -3,7 +3,7 @@
 import random
 import unittest
 
-from ob.bus import Bus, first
+from ob.bus import Bus
 from ob.krn import Kernel
 from ob.tbl import Table
 
@@ -32,7 +32,7 @@ def consume():
     return res
 
 def exec():
-    c = first()
+    c = Bus.first()
     l = list(Table.modules)
     random.shuffle(l)
     for cmd in l:

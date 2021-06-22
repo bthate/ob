@@ -13,11 +13,13 @@ from .dft import Default
 from .obj import Object, cdir, cfg, spl
 from .prs import parse_txt
 from .hdl import Handler
-from .tbl import Table, builtin
+from .tbl import Table
+from .trm import wrap
 from .thr import launch
+from .ver import __version__
 
 def __dir__():
-    return ('Cfg', 'Kernel')
+    return ('Cfg', 'Kernel', "Table", "cfg", "os", "sys", "wrap")
 
 class Cfg(Default):
 
@@ -29,10 +31,9 @@ class Kernel(Handler):
     table = Object()
  
     @staticmethod
-    def boot(name, version, mns=""):
+    def boot(name, version=__version__):
         Kernel.parse()
         Kernel.cfg.name = name
-        Kernel.cfg.mods += "," + mns
         Kernel.cfg.version = version
         Kernel.cfg.update(Kernel.cfg.sets)
         Kernel.cfg.wd = cfg.wd = Kernel.cfg.wd or cfg.wd
@@ -107,12 +108,12 @@ class Kernel(Handler):
                 mod = __import__(pn)
             except ModuleNotFoundError:
                 return
-            for mn in pkgutil.walk_packages(mod.__path__, mod.__package__+"."):
-                if mn[1] == "%s.tbl" % pn:
+            for mn in pkgutil.walk_packages(mod.__path__, pn+"."):
+                if mn[1] == "%s.%s.tbl" % (pn, mn[1]):
                     continue
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])
-                builtin(mod)
+                Table.register(mod)
 
     @staticmethod
     def wait():

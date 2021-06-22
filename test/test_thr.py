@@ -4,7 +4,7 @@ import random
 import sys
 import unittest
 
-from ob.bus import first
+from ob.bus import Bus
 from ob.evt import Command
 from ob.tbl import Table
 from ob.thr import launch
@@ -39,11 +39,11 @@ def consume():
     return res
 
 def exec():
-    k = first()
+    c = Bus.first()
     l = list(Table.modules)
     random.shuffle(l)
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
-            e = k.event(cmd + " " + ex)
-            k.dispatch(k, e)
+            e = c.event(cmd+" "+ex)
+            C.handle(e)
             events.append(e)

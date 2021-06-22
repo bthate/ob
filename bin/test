@@ -8,6 +8,7 @@ from ob.clt import Client
 from ob.hdl import Handler
 from ob.krn import Kernel
 from ob.obj import cfg
+from ob.ver import __version__
 
 import atexit
 import doctest
@@ -55,12 +56,14 @@ def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
     cfg.debug = True
-    cfg.version = 101
+    cfg.version = __version__
     cfg.wd = ".test"
     c = Test()
+    c.start()
     k = Kernel()
-    k.parse()
-    k.boot("test", cfg.version)
+    k.cfg.pkgs = "ob,om,on,oe"
+    k.boot("test")
+    k.start()
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)

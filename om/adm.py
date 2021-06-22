@@ -9,7 +9,7 @@ from ob.krn import Kernel
 from ob.obj import Object, edit, fmt, getname
 
 def __dir__():
-    return ("flt", "krn", "register", "thr", "upt")
+    return ("flt", "krn", "register", "thr", "upt", "ver")
 
 starttime = time.time()
 
@@ -55,3 +55,6 @@ def thr(event):
 
 def upt(event):
     event.reply("uptime is %s" % elapsed(time.time() - starttime))
+
+def ver(event):
+    event.reply("%s %s" % (Kernel.cfg.name.upper(), Kernel.cfg.version))

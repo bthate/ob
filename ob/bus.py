@@ -40,6 +40,14 @@ class Bus(Object):
             if isinstance(o, type):
                 return o
 
+    def first(otype=None):
+        if Bus.objs:
+            if not otype:
+                return Bus.objs[0]
+            for o in Bus.objs:
+                if otype in str(type(o)):
+                    return o
+
     @staticmethod
     def resume():
         for o in Bus.objs:
@@ -50,11 +58,3 @@ class Bus(Object):
         for o in Bus.objs:
             if o.__dorepr__() == orig:
                 o.say(channel, txt)
-
-def first(otype=None):
-    if Bus.objs:
-        if not otype:
-            return Bus.objs[0]
-        for o in Bus.objs:
-            if otype in str(type(o)):
-                return o

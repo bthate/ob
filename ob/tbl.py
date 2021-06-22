@@ -31,12 +31,11 @@ class Table(Object):
 
     @staticmethod
     def addcls(clz):
-        n = clz.__name__.lower()
+        n = "%s.%s" % (clz.__module__, clz.__name__)
         if n not in Table.names:
             Table.names[n] = []
-        nn = "%s.%s" % (clz.__module__, clz.__name__)
-        if nn not in Table.names[n]:
-            Table.names[n].append(nn)
+        if n not in Table.names[n]:
+            Table.names[n].append(n)
 
     @staticmethod
     def addmod(mod):
@@ -73,24 +72,38 @@ class Table(Object):
     def getmodule(mn, dft):
         return Table.modules.get(mn, dft)
 
-def builtin(mod):
-    Table.addmod(mod)
-    classes = find_cls(mod)
-    for nm, c in classes.items():
-        setattr(builtins, nm, c)
-        Table.addcls(c)
-    commands = find_cmd(mod)
-    for nm, c in commands.items():
-        setattr(builtins, nm, c)
-        Table.addcmd(c)
-    functions = find_func(mod)
-    for nm, f in functions.items():
-        setattr(builtins, nm, f)
+    @staticmethod
+    def register(mod):
+        Table.addmod(mod)
+        classes = find_cls(mod)
+        for nm, c in classes.items():
+            Table.addcls(c)
+        commands = find_cmd(mod)
+        for nm, c in commands.items():
+            Table.addcmd(c)
+
+    @staticmethod
+    def builtin(mod):
+        Table.addmod(mod)
+        classes = find_cls(mod)
+        for nm, c in classes.items():
+            built(nm, c)
+        commands = find_cmd(mod)
+        for nm, c in commands.items():
+            built(nm, c)
+        functions = find_func(mod)
+        for nm, f in functions.items():
+            built(nm, f)
+
+def built(nm, o):
+    setattr(builtins, nm, o)
 
 def find_cls(mod):
     res = {}
+    pn = mod.__package__
     for key, o in inspect.getmembers(mod, inspect.isclass):
-        res[o.__name__] = o
+        n = "%s.%s.%s" % (pn, o.__module__, o.__name__)
+        res[n] = o
     return res
 
 def find_cmd(mod):

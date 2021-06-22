@@ -20,6 +20,9 @@ def cdir(path):
     pathlib.Path(path).mkdir(parents=True, exist_ok=True)
 
 def gettype(o):
+    return o.__otype__
+
+def gettype(o):
     return str(type(o)).split()[-1][1:-2]
 
 def spl(txt):

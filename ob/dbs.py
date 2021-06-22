@@ -3,6 +3,7 @@
 import os
 import time
 
+from .err import NoType
 from .obj import cfg, gettype, search
 from .tbl import Table
 
@@ -139,12 +140,12 @@ def hook(hfn):
     fn = os.sep.join(oname)
     t = Table.getcls(cname)
     if not t:
-        raise NoTypeError(cname)
+        raise NoType(cname)
     if fn:
         o = t()
         o.load(fn)
         return o
-    raise NoTypeError(cname)
+    raise NoType(cname)
 
 def listfiles(wd):
     path = os.path.join(wd, "store")
