@@ -14,6 +14,7 @@ from .obj import Object, cdir, cfg, spl
 from .prs import parse_txt
 from .hdl import Handler
 from .tbl import Table, builtin
+from .thr import launch
 
 def __dir__():
     return ('Cfg', 'Kernel')
@@ -50,6 +51,7 @@ class Kernel(Handler):
             pass
         Kernel.privileges()
         Kernel.scan(Kernel.cfg.pkgs)
+        Kernel.init(Kernel.cfg.mods)
 
     @staticmethod
     def init(mns):

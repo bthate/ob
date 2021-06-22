@@ -1,20 +1,18 @@
 # This file is placed in the Public Domain.
 
-"udp to irc relay"
-
 import socket
 import time
 
-from bus import Bus
-from dbs import last
-from dft import Default
-from obj import Object
-from thr import launch
+from ob.bus import Bus
+from ob.dbs import last
+from ob.dft import Default
+from ob.obj import Object
+from ob.thr import launch
 
 def __dir__():
     return ("Cfg", "UDP", "init", "toudp")
 
-def init():
+def init(k):
     u = UDP()
     u.start()
     return u

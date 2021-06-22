@@ -1,35 +1,24 @@
 # This file is placed in the Public Domain.
 
-"rich site syndicate"
-
 import re
 import threading
 import urllib
 
-from bus import Bus
-from clk import Repeater
-from dbs import all, find, last, lastmatch
-from dft import Default
-from thr import launch
-from obj import Object, cfg, edit
+from ob.bus import Bus
+from ob.clk import Repeater
+from ob.dbs import all, find, last, lastmatch
+from ob.dft import Default
+from ob.thr import launch
+from ob.obj import Object, cfg, edit
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 from urllib.request import Request, urlopen
 
 def __dir__():
-    return ("Cfg", "Feed", "Rss", "Seen", "Fetcher", "dpl", "ftc", "init", "register", "rem", "rss")
+    return ("Cfg", "Feed", "Rss", "Seen", "Fetcher", "dpl", "ftc", "init", "rem", "rss")
 
-def register(k):
-    k.addcmd(dpl)
-    k.addcmd(ftc)
-    k.addcmd(rem)
-    k.addcmd(rss)
-    k.addcls(Feed)
-    k.addcls(Rss)
-    k.addcls(Seen)
-
-def init():
+def init(k):
     f = Fetcher()
     launch(f.start)
     return f

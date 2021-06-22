@@ -10,30 +10,24 @@ import time
 import threading
 import _thread
 
-from bus import Bus
-from dbs import find, last
-from dft import Default
-from evt import Event
-from hdl import Handler
-from opt import Output
-from thr import launch
-from obj import Object, edit, fmt
+from ob.bus import Bus
+from ob.clt import Client
+from ob.dbs import find, last
+from ob.dft import Default
+from ob.evt import Event
+from ob.hdl import Handler
+from ob.krn import Kernel
+from ob.opt import Output
+from ob.thr import launch
+from ob.obj import Object, edit, fmt
 
 def __dir__():
-    return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre", "register")
+    return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre")
 
 def init(k):
     i = IRC()
     launch(i.start)
     return i
-
-def register(k):
-    k.addcmd(cfg)
-    k.addcmd(dlt)
-    k.addcmd(met)
-    k.addcmd(mre)
-    k.addcls(Cfg)
-    k.addcls(User)
 
 def locked(l):
     def lockeddec(func, *args, **kwargs):
@@ -54,12 +48,12 @@ saylock = _thread.allocate_lock()
 class Cfg(Default):
 
     cc = "!"
-    channel = "#obot"
-    nick = "obot"
+    channel = "#ob"
+    nick = "ob"
     port = 6667
     server = "localhost"
-    realname = "24/7 channel daemon"
-    username = "obot"
+    realname = "python3 object library"
+    username = "ob"
     users = False
 
     def __init__(self, val=None):
@@ -90,7 +84,7 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Handler, Output):
+class IRC(Handler, Client):
 
     def __init__(self):
         Handler.__init__(self)
@@ -220,7 +214,7 @@ class IRC(Handler, Output):
 
     def logon(self, server, nick):
         self.raw("NICK %s" % nick)
-        self.raw("USER %s %s %s :%s" % (self.cfg.username or "botlib", server, server, self.cfg.realname or "24/7 channel daemon"))
+        self.raw("USER %s %s %s :%s" % (self.cfg.username or "ob", server, server, self.cfg.realname or "python3 object library"))
 
     def parsing(self, txt):
         rawstr = str(txt)
@@ -328,6 +322,7 @@ class IRC(Handler, Output):
                        self.cfg.nick,
                        int(self.cfg.port))
         self.connected.wait()
+        Client.start(self)
         Handler.start(self)
         Output.start(self)
         Bus.add(self)
@@ -341,12 +336,14 @@ class IRC(Handler, Output):
             self.sock.shutdown(2)
         except OSError:
             pass
+        Handler.stop(self)
+        Client.stop(self)
         Output.stop(self)
 
     def wait(self):
         self.joined.wait()
 
-class DCC(Handler):
+class DCC(Handler, Client):
 
     def __init__(self):
         super().__init__()
@@ -379,7 +376,7 @@ class DCC(Handler):
         self.fd = self.sock.fileno()
         self.raw('Welcome %s' % dccevent.origin)
         self.origin = dccevent.origin
-        super().start()
+        self.start()
 
     def dosay(self, channel, txt):
         self.raw(txt)
@@ -396,6 +393,10 @@ class DCC(Handler):
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")
+
+    def start(self):
+        Handler.start(self)
+        Client.start(self)
 
 class User(Object):
 
