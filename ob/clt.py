@@ -4,6 +4,7 @@ import queue
 import threading
 
 from .bus import Bus
+from .evt import Command
 from .krn import Kernel
 from .obj import Object
 from .thr import launch

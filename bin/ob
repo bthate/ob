@@ -53,7 +53,7 @@ def main():
     k = Kernel()
     k.boot(name, cfg.version)
     k.start()
-    k.scan("om")
+    k.scan(k.cfg.mods)
     c = CLI()
     return c.cmd(k.cfg.otxt)
 
