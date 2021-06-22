@@ -153,7 +153,7 @@ class Object(Obj):
 
 cfg = Object()
 cfg.debug = False
-cfg.wd = ".olib"
+cfg.wd = ""
 
 def edit(o, setter, skip=False):
     count = 0
