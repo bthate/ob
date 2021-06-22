@@ -14,7 +14,7 @@ setup(
     url='https://github.com/bthate/ob',
     long_description=read(),
     license='Public Domain',
-    packages=["ob", "om", "on", "oe"],
+    packages=["ob", "od", "om", "on", "oe"],
     zip_safe=True,
     scripts=["bin/ob"],
     classifiers=['Development Status :: 3 - Alpha',
