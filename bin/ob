@@ -18,12 +18,8 @@ class CLI(Client):
     def raw(self, txt):
         print(txt)
 
-def cmd(event):
-    event.reply(",".join(sorted(Table.modules)))
-
 def main():
     cfg.wd = os.path.expanduser("~/.%s" % name)
-    Table.addcmd(cmd)
     k = Kernel()
     k.boot(name)
     k.start()
