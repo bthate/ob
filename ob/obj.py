@@ -86,6 +86,10 @@ class Obj(O):
         if args:
             self.update(args[0])
 
+    def delkeys(self, keys=[]):
+        for k in keys:
+            del self[k]
+
     def get(self, key, default=None):
         return self.__dict__.get(key, default)
 
@@ -155,10 +159,12 @@ cfg = Object()
 cfg.debug = False
 cfg.wd = ""
 
-def edit(o, setter, skip=False):
+def edit(o, setter, skip=True, skiplist=[]):
     count = 0
     for key, v in setter.items():
         if skip and v == "":
+            continue
+        if key in skiplist:
             continue
         count += 1
         if v in ["True", "true"]:

@@ -7,7 +7,7 @@ def read():
 
 setup(
     name='ob',
-    version='101',
+    version='102',
     description="python3 object library",
     author='Bart Thate',
     author_email='bthate67@gmail.com', 

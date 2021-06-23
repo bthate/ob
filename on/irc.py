@@ -1,7 +1,5 @@
 # This file is placed in the Public Domain.
 
-"irc bot"
-
 import os
 import queue
 import socket
@@ -490,6 +488,7 @@ def QUIT(hdl, obj):
 def cfg(event):
     c = Cfg()
     last(c)
+    event.sets.delkeys(["pkgs", "mods"])
     if not event.sets:
         return event.reply(fmt(c, skip=["username", "realname"]))
     edit(c, event.sets)

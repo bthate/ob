@@ -1,4 +1,3 @@
-recursive-include om *.py
 recursive-include od *.py
 recursive-include oe *.py
 recursive-include on *.py
