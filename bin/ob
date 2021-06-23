@@ -7,6 +7,8 @@ from ob.clt import Client
 from ob.krn import Kernel, Table, cfg, os, wrap
 from ob.tbl import builtin
 
+import readline
+
 builtin("cfg", cfg)
 
 class CLI(Client):

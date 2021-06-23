@@ -7,9 +7,6 @@ from ob.tbl import builtin
 
 builtin("cfg", cfg)
 
-import ob
-import ob.obj
-
 import doctest
 import readline
 import shutil
@@ -32,7 +29,7 @@ def main():
     c = Test()
     c.start()
     k = Kernel()
-    k.cfg.pkgs = "ob,om,on,oe,od"
+    Kernel.cfg.pkgs = "ob,om,on,oe,od"
     k.boot("test")
     k.start()
     builtin("k", k)
