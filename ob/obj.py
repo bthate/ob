@@ -153,6 +153,7 @@ class Object(Obj):
         with open(opath, "w") as ofile:
             js.dump(self, ofile, default=self.__default__, indent=4, sort_keys=True)
         os.chmod(opath, 0o444)
+        #print("save %s" % self.__stp__)
         return self.__stp__
 
 cfg = Object()

@@ -17,6 +17,7 @@ reserved = ["cdir", "wrap"]
 
 class Table(Object):
 
+    classes = Object()
     cmds = Object()
     fulls = Object()
     names = Default()
@@ -31,11 +32,15 @@ class Table(Object):
 
     @staticmethod
     def addcls(clz):
-        n = "%s.%s" % (clz.__module__, clz.__name__)
+        nn = "%s.%s" % (clz.__module__, clz.__name__)
+        if nn in Table.classes:
+            return
+        n = clz.__name__.lower()
         if n not in Table.names:
             Table.names[n] = []
         if n not in Table.names[n]:
-            Table.names[n].append(n)
+            Table.names[n].append(nn)
+        Table.classes[nn] = clz
 
     @staticmethod
     def addmod(mod):
@@ -45,12 +50,7 @@ class Table(Object):
 
     @staticmethod
     def getcls(name):
-        if "." in name:
-            mn, clsn = name.rsplit(".", 1)
-        else:
-            raise NoClass(name)
-        mod = Table.getmod(mn)
-        return getattr(mod, clsn, None)
+        return Table.classes.get(name, None)
 
     @staticmethod
     def getcmd(c):

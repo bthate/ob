@@ -9,8 +9,6 @@ from ob.tbl import builtin
 
 import readline
 
-builtin("cfg", cfg)
-
 class CLI(Client):
 
     def error(self, e):

@@ -4,7 +4,7 @@ import os
 import unittest
 
 from ob.dbs import find, last
-from ob.obj import O, Object, gettype, merge
+from ob.obj import O, Object, cfg, gettype, merge
 
 class Test_Object(unittest.TestCase):
 

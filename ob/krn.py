@@ -51,6 +51,7 @@ class Kernel(Handler):
         except PermissionError:
             pass
         Kernel.privileges()
+        Kernel.scan("ob")
         Kernel.scan(Kernel.cfg.pkgs)
         Kernel.init(Kernel.cfg.mods)
 

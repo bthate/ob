@@ -4,7 +4,7 @@ import os
 import time
 
 from .err import NoType
-from .obj import cfg, gettype, search
+from .obj import gettype, search
 from .tbl import Table
 
 def all(otype, selector=None, index=None, timed=None):
@@ -34,9 +34,10 @@ def deleted(otype):
             yield fn, o
 
 def every(selector=None, index=None, timed=None):
-    nr = -1
+    from .obj import cfg
     if selector is None:
         selector = {}
+    nr = -1
     for otype in os.listdir(os.path.join(cfg.wd, "store")):
         for fn in fns(otype, timed):
             o = hook(fn)
@@ -70,7 +71,8 @@ def find(otypes, selector=None, index=None, timed=None):
         return (None, None)
 
 def last(o):
-    path, l = lastfn(str(gettype(o)))
+    t = str(gettype(o))
+    path, l = lastfn(t)
     if  l:
         o.update(l)
     if path:
@@ -97,6 +99,7 @@ def lastfn(otype):
     return (None, None)
 
 def fns(name, timed=None):
+    from .obj import cfg
     if not name:
         return []
     p = os.path.join(cfg.wd, "store", name) + os.sep
@@ -138,7 +141,8 @@ def hook(hfn):
         oname = hfn.split(os.sep)
     cname = oname[0]
     fn = os.sep.join(oname)
-    t = Table.getcls(cname)
+    t = Table.classes.get(cname, None)
+    #t = Table.getcls(cname)
     if not t:
         raise NoType(cname)
     if fn:

@@ -6,6 +6,7 @@ import unittest
 
 from ob.bus import Bus
 from ob.evt import Command
+from ob.obj import cfg
 from ob.tbl import Table
 from ob.thr import launch
 from ob.krn import Kernel

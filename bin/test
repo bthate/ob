@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
+name = "ob"
+
 from ob.clt import Client
 from ob.krn import Kernel, Table, cfg, os, wrap
 from ob.tbl import builtin
-
-builtin("cfg", cfg)
 
 import doctest
 import readline
@@ -29,8 +29,7 @@ def main():
     c = Test()
     c.start()
     k = Kernel()
-    Kernel.cfg.pkgs = "ob,om,on,oe,od"
-    k.boot("test")
+    k.boot(name)
     k.start()
     builtin("k", k)
     pat = "test_%s*" % "*"
