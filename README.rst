@@ -20,7 +20,7 @@ and a type in filename for reconstruction.
 
 basic usage is this::
 
- >>> from obj import Object
+ >>> from ob.obj import Object
  >>> o = Object()
  >>> o.key = "value"
  >>> o.key
@@ -33,13 +33,13 @@ methods like get, items, keys, register, set, update, values.
 the bot.obj module has the basic methods like load and save as a object
 function using an obj as the first argument::
 
- >>> from obj import Object, cfg
+ >>> from ob.obj import Object, cfg
  >>> cfg.wd = "data"
  >>> o = Object()
  >>> o["key"] = "value"
  >>> p = o.save()
  >>> p
- 'obj.Object/4b58abe2-3757-48d4-986b-d0857208dd96/2021-04-12/21:15:33.734994
+ 'ob.obj.Object/4b58abe2-3757-48d4-986b-d0857208dd96/2021-04-12/21:15:33.734994
  >>> oo = Object()
  >>> oo.load(p)
  >> oo.key
@@ -84,10 +84,10 @@ modules are not read from a directory, instead you must include your own
 written commands with a updated version of the code. First clone the
 repository (as user)::
 
- $ git clone http://github.com/bthate67/ob
+ $ git clone http://github.com/bthate/ob
  $ cd ob
 
-to program your own commands, open ob/hlo.py (new file) and add the following
+to program your own commands, open om/hlo.py (new file) and add the following
 code::
  
     def hlo(event):
@@ -95,7 +95,7 @@ code::
 
 now giving the hlo command should respond::
 
- $ ./bin/ob hlo
+ $ ./bin/ob pkgs=om hlo
  hello root@console
 
 OB is placed in the Public Domain and has no COPYRIGHT and no LICENSE.

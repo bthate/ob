@@ -20,6 +20,7 @@ class Client(Object):
     def cmd(self, txt):
         Bus.add(self)
         e = self.event(txt)
+        e.origin = "root@shell"
         Kernel.dispatch(self, e)
         e.wait()
 
