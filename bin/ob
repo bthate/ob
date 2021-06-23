@@ -5,6 +5,9 @@ name = "ob"
 
 from ob.clt import Client
 from ob.krn import Kernel, Table, cfg, os, wrap
+from ob.tbl import builtin
+
+builtin("cfg", cfg)
 
 class CLI(Client):
 

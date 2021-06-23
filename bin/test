@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-import os, sys ; sys.path.insert(0, os.getcwd())
-
-from ob.bus import Bus
 from ob.clt import Client
-from ob.hdl import Handler
-from ob.krn import Kernel
-from ob.obj import cfg
-from ob.ver import __version__
+from ob.krn import Kernel, Table, cfg, os, wrap
+from ob.tbl import builtin
 
-import atexit
+builtin("cfg", cfg)
+
+import ob
+import ob.obj
+
 import doctest
+import readline
 import shutil
-import termios
 import unittest
 
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
@@ -25,45 +24,18 @@ class Test(Client):
         if Kernel.opts("v"):
             print(txt)
 
-def termsetup(fd):
-    return termios.tcgetattr(fd)
-
-def termreset():
-    if "old" in resume:
-        try:
-            termios.tcsetattr(resume["fd"], termios.TCSADRAIN, resume["old"])
-        except termios.error:
-            pass
-
-def termsave():
-    try:
-        resume["fd"] = sys.stdin.fileno()
-        resume["old"] = termsetup(sys.stdin.fileno())
-        atexit.register(termreset)
-    except termios.error:
-        pass
-
-def wrap(func):
-    termsave()
-    try:
-        func()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        termreset()
-
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
     cfg.debug = True
-    cfg.version = __version__
     cfg.wd = ".test"
     c = Test()
     c.start()
     k = Kernel()
-    k.cfg.pkgs = "ob,om,on,oe"
+    k.cfg.pkgs = "ob,om,on,oe,od"
     k.boot("test")
     k.start()
+    builtin("k", k)
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)

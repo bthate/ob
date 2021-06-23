@@ -11,7 +11,7 @@ from .err import NoClass
 from .obj import Object
 
 def __dir__():
-    return ('Table',)
+    return ('Table', "builtin")
 
 reserved = ["cdir", "wrap"]
 
@@ -83,19 +83,19 @@ class Table(Object):
             Table.addcmd(c)
 
     @staticmethod
-    def builtin(mod):
-        Table.addmod(mod)
-        classes = find_cls(mod)
+    def mod(m):
+        Table.addmod(m)
+        classes = find_cls(m)
         for nm, c in classes.items():
             built(nm, c)
-        commands = find_cmd(mod)
+        commands = find_cmd(m)
         for nm, c in commands.items():
             built(nm, c)
-        functions = find_func(mod)
+        functions = find_func(m)
         for nm, f in functions.items():
             built(nm, f)
 
-def built(nm, o):
+def builtin(nm, o):
     setattr(builtins, nm, o)
 
 def find_cls(mod):

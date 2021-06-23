@@ -8,6 +8,14 @@ from ob.obj import O, Object, gettype, merge
 
 class Test_Object(unittest.TestCase):
 
+    def setUp(self):
+        cfg.wd = ".test"
+        k.stop()
+        k.start()
+        
+    def TearDown(self):
+        k.stop()
+
     def test_O(self):
         o = O()
         self.assertEqual(type(o), O)
