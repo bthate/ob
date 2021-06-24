@@ -5,6 +5,9 @@ from .obj import Object
 
 import datetime
 
+def __dir__():
+    return ('day', 'elapsed', 'parse_txt', 'parse_ymd')
+
 class Token(Object):
 
     def __init__(self, txt):

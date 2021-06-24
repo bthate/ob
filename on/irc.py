@@ -481,7 +481,7 @@ def PRIVMSG(clt, obj):
         if clt.cfg.users and not clt.users.allowed(obj.origin, "USER"):
             return
         obj.type = "cmd"
-        k.put(clt,obj)
+        k.put(obj)
 
 def QUIT(clt, obj):
     if obj.orig and obj.orig in clt.zelf:

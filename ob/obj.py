@@ -8,9 +8,7 @@ import types
 import uuid
 
 def __dir__():
-    return ('O', 'Obj', 'Object', 'cdir', 'cfg', 'edit', 'fmt', 'get', 'getname',
-            'gettype', 'items', 'keys', 'load', 'merge', 'overlay', 'register',
-            'save', 'search', 'set', 'spl', 'update', 'values')
+    return ('O', 'Obj', 'Object', 'cdir', 'edit', 'fmt', 'getname', 'gettype', 'spl')
 
 def cdir(path):
     if os.path.exists(path):
@@ -107,8 +105,27 @@ class Obj(O):
             else:
                 self[k] = v
 
+    def overlay(self, d, keys=None, skip=None):
+        for k, v in d.items():
+            if keys and k not in keys:
+                continue
+            if skip and k in skip:
+                continue
+            if v:
+                self[k] = v
+
     def register(self, key, value):
         self[str(key)] = value
+
+    def search(o, s):
+        ok = False
+        for k, v in s.items():
+            vv = getattr(o, k, None)
+            if v not in str(vv):
+                ok = False
+                break
+            ok = True
+        return ok
 
     def set(self, key, value):
         self.__dict__[key] = value
@@ -125,6 +142,7 @@ class Object(Obj):
         return repr(self)
 
     def load(self, opath):
+        from .krn import k
         assert k.cfg.wd
         if opath.count(os.sep) != 3:
             raise NoFilenameError(opath)
@@ -139,6 +157,7 @@ class Object(Obj):
         return self
 
     def save(self, tab=False):
+        from .krn import k
         assert k.cfg.wd
         prv = os.sep.join(self.__stp__.split(os.sep)[:2])
         self.__stp__ = os.path.join(prv, os.sep.join(str(datetime.datetime.now()).split()))
@@ -189,9 +208,6 @@ def fmt(o, keys=None, empty=True, skip=None):
     txt += " ".join([x.strip() for x in result])
     return txt.strip()
 
-def get(o, key, default=None):
-    return o.__dict__.get(key, default)
-
 def getname(o):
     t = type(o)
     if t == types.ModuleType:
@@ -204,78 +220,3 @@ def getname(o):
         return o.__class__.__name__
     if "__name__" in dir(o):
         return o.__name__
-
-def items(o):
-    return o.__dict__.items()
-
-def json(o):
-    return repr(o)
-
-def keys(o):
-    return o.__dict__.keys()
-
-def load(o, opath):
-    assert k.cfg.wd
-    if opath.count(os.sep) != 3:
-        raise NoFilenameError(opath)
-    spl = opath.split(os.sep)
-    stp = os.sep.join(spl[-4:])
-    lpath = os.path.join(k.cfg.wd, "store", stp)
-    if os.path.exists(lpath):
-        with open(lpath, "r") as ofile:
-            d = js.load(ofile, object_hook=Obj)
-            o.update(d)
-    o.__stp__ = stp
-
-def merge(o, d):
-    for k, v in d.items():
-        if not v:
-            continue
-        if k in o:
-            if isinstance(o[k], dict):
-                continue
-            o[k] = o[k] + v
-        else:
-            o[k] = v
-
-def overlay(o, d, keys=None, skip=None):
-    for k, v in d.items():
-        if keys and k not in keys:
-            continue
-        if skip and k in skip:
-            continue
-        if v:
-            o[k] = v
-
-def register(o, key, value):
-    o[str(key)] = value
-
-def save(o, tab=False):
-    assert k.cfg.wd
-    prv = os.sep.join(o.__stp__.split(os.sep)[:2])
-    o.__stp__ = os.path.join(prv, os.sep.join(str(datetime.datetime.now()).split()))
-    opath = os.path.join(k.cfg.wd, "store", o.__stp__)
-    cdir(opath)
-    with open(opath, "w") as ofile:
-        js.dump(o, ofile, default=o.__default__, indent=4, sort_keys=True)
-    os.chmod(opath, 0o444)
-    return o.__stp__
-
-def set(o, key, value):
-    o.__dict__[key] = value
-
-def search(o, s):
-    ok = False
-    for k, v in s.items():
-        vv = getattr(o, k, None)
-        if v not in str(vv):
-            ok = False
-            break
-        ok = True
-    return ok
-
-def update(o, data):
-    return o.__dict__.update(data)
-
-def values(o):
-    return o.__dict__.values()

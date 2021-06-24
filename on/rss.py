@@ -138,7 +138,7 @@ def getfeed(url):
                 yield entry
 
 def gettinyurl(url):
-    if cfg.debug:
+    if k.cfg.debug:
         return []
     postarray = [
         ('submit', 'submit'),
@@ -155,7 +155,7 @@ def gettinyurl(url):
     return []
 
 def geturl(url):
-    if cfg.debug:
+    if k.cfg.debug:
         return
     url = urllib.parse.urlunparse(urllib.parse.urlparse(url))
     req = urllib.request.Request(url)

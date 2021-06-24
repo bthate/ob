@@ -2,6 +2,9 @@
 
 from .obj import Object
 
+def __dir__():
+    return ('Default',)
+
 class Default(Object):
 
     default = ""

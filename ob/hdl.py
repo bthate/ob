@@ -10,6 +10,9 @@ from .trc import get_exception
 import queue
 import threading
 
+def __dir__():
+    return ('Handler',)
+
 class Handler(Object):
 
     def __init__(self):
@@ -72,6 +75,7 @@ class Handler(Object):
         self.start()
 
     def start(self):
+        from .krn import k
         self.register("cmd", k.dispatch)
         launch(self.dispatcher)
         return self

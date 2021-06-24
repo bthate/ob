@@ -4,6 +4,7 @@ import threading
 import time
 
 from ob.bus import Bus
+from ob.krn import k
 from ob.prs import elapsed
 from ob.obj import Object, edit, fmt, getname
 

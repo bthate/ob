@@ -2,6 +2,9 @@
 
 from ob.dft import Default
 
+def __dir__():
+    return ('Cfg',)
+
 class Cfg(Default):
 
     pass

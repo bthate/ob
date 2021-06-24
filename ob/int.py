@@ -3,10 +3,14 @@
 import builtins
 import inspect
 
+def __dir__():
+    return ('find_cls', 'find_cmd', 'find_func')
+
+do = ["cfg", "k", "wrap"]
+
 def builtin(nm, o):
     setattr(builtins, nm, o)
 
-do = ["cfg", "k", "wrap"]
 
 def find_cls(mod):
     res = {}

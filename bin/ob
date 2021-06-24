@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
+import os, sys ; sys.path.insert(0, os.getcwd())
+
 from ob.clt import Client
-from ob.krn import Kernel, builtin
+from ob.krn import k
 from ob.trm import wrap
 
 import os
@@ -35,10 +37,8 @@ class Console(CLI):
         return input("> ")
 
 def main():
-    k = Kernel()
     k.cfg.p = "om"
     k.boot(name, wd)
-    builtin("k", k)
     k.start()
     wait = k.opts("c") or k.cfg.m
     if k.cfg.txt and not wait:

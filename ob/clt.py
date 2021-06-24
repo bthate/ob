@@ -5,8 +5,12 @@ import threading
 
 from .bus import Bus
 from .evt import Command
+from .krn import k
 from .obj import Object
 from .thr import launch
+
+def __dir__():
+    return ('Client',) 
 
 class Client(Object):
 

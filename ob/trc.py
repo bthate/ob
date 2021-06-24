@@ -4,6 +4,9 @@ import os
 import sys
 import traceback
 
+def __dir__():
+    return ('get_exception',)
+
 def get_exception(txt="", sep=" "):
     exctype, excvalue, tb = sys.exc_info()
     trace = traceback.extract_tb(tb)

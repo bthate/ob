@@ -12,9 +12,7 @@ from .int import find_cls, find_cmd, find_func
 from .obj import Object
 
 def __dir__():
-    return ('Table', "builtin")
-
-reserved = ["cdir", "wrap"]
+    return ('Table',)
 
 class Table(Object):
 

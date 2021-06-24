@@ -2,6 +2,9 @@
 
 from .obj import Object
 
+def __dir__():
+    return ('List',)
+
 class List(Object):
 
     def append(self, key, value):

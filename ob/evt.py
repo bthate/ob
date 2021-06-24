@@ -7,6 +7,9 @@ from .dft import Default
 from .opt import Output
 from .prs import parse_txt
 
+def __dir__():
+   return ('Command', 'Event')
+
 class Event(Default):
 
     def __init__(self):

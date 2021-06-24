@@ -1,5 +1,8 @@
 # This file is placed in the Public Domain.
 
+def __dir__():
+    return ('NoClass', 'NoType', 'NoText', 'NoUser', 'Restart', 'Stop')
+
 class NoClass(Exception):
 
     pass

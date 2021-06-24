@@ -4,6 +4,9 @@ import atexit
 import sys
 import termios
 
+def __dir__():
+    return ('termsave', 'termreset', 'wrap')
+
 resume = {}
 
 def termsetup(fd):

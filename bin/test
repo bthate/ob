@@ -3,11 +3,11 @@
 
 name = "ob"
 
+import os, sys ; sys.path.insert(0, os.getcwd())
+
 from ob.bus import Bus
 from ob.clt import Client
-from ob.krn import Kernel, Table, os, wrap
-from ob.obj import cfg
-from ob.tbl import builtin
+from ob.krn import k, wrap
 
 import doctest
 import readline
@@ -25,10 +25,9 @@ class Test(Client):
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
-    cfg.wd = ".test"
-    cfg.debug = True
-    k = Kernel()
-    Kernel.cfg.pkgs = "ob,om,on,oe"
+    k.cfg.wd = ".test"
+    k.cfg.debug = True
+    k.cfg.pkgs = "ob,om,on,oe"
     k.boot(name)
     k.start()
     c = Test()

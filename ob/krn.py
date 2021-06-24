@@ -21,7 +21,7 @@ from .thr import launch
 from .ver import __version__
 
 def __dir__():
-    return ('Cfg', 'Kernel', 'builtin')
+    return ('Cfg', 'Kernel', 'builtin', 'k')
 
 class Cfg(Default):
 
@@ -136,6 +136,8 @@ class Kernel(Table, Handler):
     def wait():
         while 1:
             time.sleep(5.0)
+
+k = Kernel()
 
 def builtin(nm, o):
     setattr(builtins, nm, o)

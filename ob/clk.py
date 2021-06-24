@@ -1,10 +1,13 @@
 # This file is placed in the Public Domain.
 
+import threading
+import time
+
 from .obj import Object
 from .thr import launch, getname
 
-import threading
-import time
+def __dir__():
+    return ('Repeater', 'Timer')
 
 class Timer(Object):
 

@@ -16,8 +16,9 @@
 
 # save/load
 
->>> from ob.obj import Object, cfg
->>> cfg.wd = ".test"
+>>> from ob.krn import k
+>>> k.cfg.wd = ".test"
+>>> from ob.obj import Object
 >>> o = Object()
 >>> o["key"] = "value"
 >>> p = o.save()
