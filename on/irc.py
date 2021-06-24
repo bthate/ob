@@ -14,7 +14,6 @@ from ob.dbs import find, last
 from ob.dft import Default
 from ob.evt import Event
 from ob.hdl import Handler
-from ob.krn import Kernel
 from ob.opt import Output
 from ob.thr import launch
 from ob.obj import Object, edit, fmt
@@ -109,7 +108,6 @@ class IRC(Handler, Client, Output):
         self.threaded = False
         self.users = Users()
         self.zelf = ""
-        self.register("cmd", Kernel.dispatch)
         self.register("ERROR", ERROR)
         self.register("LOG", LOG)
         self.register("NOTICE", NOTICE)
@@ -310,6 +308,7 @@ class IRC(Handler, Client, Output):
         self.state.lastline = splitted[-1]
 
     def start(self):
+        self.register("cmd", k.dispatch)
         last(self.cfg)
         if self.cfg.channel not in self.channels:
             self.channels.append(self.cfg.channel)
@@ -389,6 +388,9 @@ class DCC(Handler, Client):
         e.txt = txt.rstrip()
         e.sock = self.sock
         return e
+
+    def handle(self, clt, e):
+        k.dispatch(clt, e)
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")

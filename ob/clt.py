@@ -5,7 +5,7 @@ import threading
 
 from .bus import Bus
 from .evt import Command
-from .krn import Kernel
+from .krn import kernel
 from .obj import Object
 from .thr import launch
 
@@ -16,7 +16,7 @@ class Client(Object):
         self.iqueue = queue.Queue()
         self.speed = "normal"
         self.stopped = threading.Event()
-        self.target = k
+        self.target = None
 
     def event(self, txt):
         if txt is None:
@@ -52,6 +52,7 @@ class Client(Object):
         self.iqueue.put_nowait(e)
 
     def start(self):
+        self.target = k
         Bus.add(self)
         launch(self.handler)
         return self

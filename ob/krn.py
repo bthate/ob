@@ -1,5 +1,6 @@
 # This file is placed in the Public Domain.
 
+import builtins
 import getpass
 import importlib
 import ob
@@ -144,3 +145,9 @@ class Kernel(Table, Handler):
     def wait():
         while 1:
             time.sleep(5.0)
+
+def builtin(nm, o):
+    setattr(builtins, nm, o)
+
+def kernel():
+    return k

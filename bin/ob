@@ -3,9 +3,15 @@
 
 name = "ob"
 
+import builtins
 import os
 import readline
 import sys
+
+from ob.krn import Kernel, builtin
+
+k = Kernel()
+builtin("k", k)
 
 from ob.clt import Client
 from ob.int import builtin
@@ -41,8 +47,7 @@ def main():
     k.boot(name)
     k.start()
     builtin("k", k)
-    import ob.all
-    if k.cfg.txt and not k.opts("c"):
+    if k.cfg.txt and (not k.opts("c") or not k.cfg.m):
         c = CLI()
         return k.cmd(c, k.cfg.otxt)
     if k.cfg.m or k.opts("c"):
