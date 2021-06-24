@@ -14,6 +14,7 @@ from ob.dbs import find, last
 from ob.dft import Default
 from ob.evt import Event
 from ob.hdl import Handler
+from ob.krn import k
 from ob.opt import Output
 from ob.thr import launch
 from ob.obj import Object, edit, fmt

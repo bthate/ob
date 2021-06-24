@@ -1,7 +1,8 @@
 # This file is placed in the Public Domain.
 
 from .err import NoType
-from .obj import gettype, search
+from .krn import k
+from .obj import gettype
 
 import os
 import time
@@ -17,7 +18,7 @@ def all(otype, selector=None, index=None, timed=None):
     for t in otypes:
         for fn in fns(t, timed):
             o = hook(fn)
-            if selector and not search(o, selector):
+            if selector and not o.search(selector):
                 continue
             if "_deleted" in o and o._deleted:
                 continue
@@ -42,7 +43,7 @@ def every(selector=None, index=None, timed=None):
     for otype in os.listdir(os.path.join(k.cfg.wd, "store")):
         for fn in fns(otype, timed):
             o = hook(fn)
-            if selector and not search(o, selector):
+            if selector and not o.search(selector):
                 continue
             if "_deleted" in o and o._deleted:
                 continue
@@ -59,7 +60,7 @@ def find(otypes, selector=None, index=None, timed=None):
     for t in otypes:
         for fn in fns(t, timed):
             o = hook(fn)
-            if selector and not search(o, selector):
+            if selector and not o.search(selector):
                 continue
             if "_deleted" in o and o._deleted:
                 continue
