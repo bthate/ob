@@ -1,17 +1,16 @@
 # This file is placed in the Public Domain.
 
-import os
-import time
-
 from .err import NoType
 from .obj import gettype, search
-from .tbl import Table
+
+import os
+import time
 
 def all(otype, selector=None, index=None, timed=None):
     nr = -1
     if selector is None:
         selector = {}
-    otypes = Table.getnames(otype, [])
+    otypes = k.getnames(otype, [])
     for t in otypes:
         for fn in fns(t, timed):
             o = hook(fn)
@@ -25,7 +24,7 @@ def all(otype, selector=None, index=None, timed=None):
             yield fn, o
 
 def deleted(otype):
-    otypes = Table.getnames(otype, [])
+    otypes = k.getnames(otype, [])
     for t in otypes:
         for fn in fns(t):
             o = hook(fn)
@@ -141,8 +140,7 @@ def hook(hfn):
         oname = hfn.split(os.sep)
     cname = oname[0]
     fn = os.sep.join(oname)
-    t = Table.classes.get(cname, None)
-    #t = Table.getcls(cname)
+    t = k.classes.get(cname, None)
     if not t:
         raise NoType(cname)
     if fn:

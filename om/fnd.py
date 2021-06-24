@@ -5,7 +5,6 @@ import time
 from ob.dbs import find, listfiles, fntime
 from ob.prs import elapsed
 from ob.obj import cfg, fmt
-from ob.tbl import Table
 
 def __dir__():
     return ("fnd",)
@@ -24,7 +23,7 @@ def fnd(event):
     except IndexError:
         pass
     got = False
-    otypes = Table.getnames(otype, [otype,])
+    otypes = k.getnames(otype, [otype,])
     for fn, o in find(otypes, event.gets, event.index, event.timed):
         nr += 1
         txt = "%s %s" % (str(nr), fmt(o, args or o.keys(), skip=event.skip.keys()))

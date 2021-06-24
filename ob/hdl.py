@@ -1,15 +1,14 @@
 # This file is placed in the Public Domain.
 
-import queue
-import threading
-
 from .bus import Bus
 from .err import Restart, Stop
 from .evt import Command, Event
 from .obj import Object
-from .tbl import Table
 from .thr import launch
 from .trc import get_exception
+
+import queue
+import threading
 
 class Handler(Object):
 
@@ -30,7 +29,7 @@ class Handler(Object):
     @staticmethod
     def dispatch(hdl, obj):
         obj.parse()
-        f = Table.getcmd(obj.cmd)
+        f = self.getcmd(obj.cmd)
         if f:
             f(obj)
             obj.show()

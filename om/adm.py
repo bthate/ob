@@ -5,7 +5,6 @@ import time
 
 from ob.bus import Bus
 from ob.prs import elapsed
-from ob.krn import Kernel
 from ob.obj import Object, edit, fmt, getname
 
 def __dir__():
@@ -24,10 +23,10 @@ def flt(event):
 
 def krn(event):
     if not event.args:
-        event.reply(fmt(Kernel.cfg, skip=["otxt", "opts", "sets", "old", "res"]))
+        event.reply(fmt(k.cfg, skip=["otxt", "opts", "sets", "old", "res"]))
         return
-    edit(Kernel.cfg, event.sets)
-    Kernel.cfg.save()
+    edit(k.cfg, event.sets)
+    k.cfg.save()
     event.reply("ok")
 
 def thr(event):
@@ -57,4 +56,4 @@ def upt(event):
     event.reply("uptime is %s" % elapsed(time.time() - starttime))
 
 def ver(event):
-    event.reply("%s %s" % (Kernel.cfg.name.upper(), Kernel.cfg.version))
+    event.reply("%s %s" % (k.cfg.name.upper(), k.cfg.version))

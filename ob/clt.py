@@ -1,13 +1,13 @@
 # This file is placed in the Public Domain.
 
+import queue
+import threading
+
 from .bus import Bus
 from .evt import Command
 from .krn import Kernel
 from .obj import Object
 from .thr import launch
-
-import queue
-import threading
 
 class Client(Object):
 
@@ -16,13 +16,7 @@ class Client(Object):
         self.iqueue = queue.Queue()
         self.speed = "normal"
         self.stopped = threading.Event()
-        
-    def cmd(self, txt):
-        Bus.add(self)
-        e = self.event(txt)
-        e.origin = "root@shell"
-        Kernel.dispatch(self, e)
-        e.wait()
+        self.target = k
 
     def event(self, txt):
         if txt is None:
@@ -33,7 +27,7 @@ class Client(Object):
         return c
 
     def handle(self, e):
-        Kernel.dispatch(self, e)
+        self.target.dispatch(self, e)
 
     def handler(self):
         while not self.stopped.isSet():
