@@ -29,13 +29,15 @@ class Kernel(Handler):
 
     cfg = Cfg()
     table = Object()
- 
+
     @staticmethod
     def boot(name, version=__version__):
         Kernel.parse()
         Kernel.cfg.name = name
         Kernel.cfg.version = version
+        print(Kernel.cfg)
         Kernel.cfg.update(Kernel.cfg.sets)
+        print(Kernel.cfg)
         Kernel.cfg.wd = cfg.wd = Kernel.cfg.wd or cfg.wd
         cdir(Kernel.cfg.wd + os.sep)
         try:
@@ -52,6 +54,7 @@ class Kernel(Handler):
             pass
         Kernel.privileges()
         Kernel.scan("ob")
+        print(Kernel.cfg.pkgs)
         Kernel.scan(Kernel.cfg.pkgs)
         Kernel.init(Kernel.cfg.mods)
 
@@ -73,7 +76,7 @@ class Kernel(Handler):
     @staticmethod
     def parse():
         txt = " ".join(sys.argv[1:])
-        o = Object()
+        o = Default()
         parse_txt(o, txt)
         Kernel.cfg.update(o)
 
@@ -105,12 +108,13 @@ class Kernel(Handler):
     @staticmethod
     def scan(pkgs):
         for pn in spl(pkgs):
+            print(pn)
             try:
                 mod = __import__(pn)
             except ModuleNotFoundError:
                 return
             for mn in pkgutil.walk_packages(mod.__path__, pn+"."):
-                if mn[1] == "%s.%s.tbl" % (pn, mn[1]):
+                if mn[1] in ["ob.tbl", "ob.krn", "ob.obj"]:
                     continue
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])

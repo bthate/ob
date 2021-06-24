@@ -113,12 +113,12 @@ def parse_txt(o, ptxt=None):
         raise NoTextError(o)
     o.txt = ptxt
     o.otxt = ptxt
-    o.gets = Default()
-    o.opts = Default()
+    o.gets = o.gets or Default()
+    o.opts = o.opts or Default()
     o.timed = []
     o.index = None
-    o.sets = Default()
-    o.skip = Default()
+    o.sets = o.sets or Default()
+    o.skip = o.skip or Default()
     args = []
     for token in [Token(txt) for txt in ptxt.split()]:
         u = Url(token.txt)
@@ -152,10 +152,10 @@ def parse_txt(o, ptxt=None):
             continue
         args.append(token.txt)
     if not args:
-        o.args = []
-        o.cmd = ""
-        o.rest = ""
-        o.txt = ""
+        o.args = o.args or []
+        o.cmd = o.cmd or ""
+        o.rest = o.rest or ""
+        o.txt = o.txt or ""
         return o
     o.cmd = args[0]
     o.args = args[1:]

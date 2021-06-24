@@ -38,5 +38,5 @@ def exec():
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
             e = c.event(cmd + " " + ex)
-            c.dispatch(Kernel, e)
+            Kernel.dispatch(c, e)
             events.append(e)

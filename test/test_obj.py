@@ -1,20 +1,12 @@
 # This file is placed in the Public Domain.
 
+from ob.dbs import find, last
+from ob.obj import O, Object, gettype, merge
+
 import os
 import unittest
 
-from ob.dbs import find, last
-from ob.obj import O, Object, cfg, gettype, merge
-
 class Test_Object(unittest.TestCase):
-
-    def setUp(self):
-        cfg.wd = ".test"
-        k.stop()
-        k.start()
-        
-    def TearDown(self):
-        k.stop()
 
     def test_O(self):
         o = O()

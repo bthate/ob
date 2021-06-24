@@ -3,11 +3,11 @@
 import threading
 
 from .bus import Bus
-from .obj import Object
+from .dft import Default
 from .opt import Output
 from .prs import parse_txt
 
-class Event(Object):
+class Event(Default):
 
     def __init__(self):
         super().__init__()

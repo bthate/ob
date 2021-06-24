@@ -8,9 +8,9 @@ import types
 import uuid
 
 def __dir__():
-    return ('O', 'Obj', 'Object', 'cdir', 'edit', 'fmt', 'get', 'getname',
+    return ('O', 'Obj', 'Object', 'cdir', 'cfg', 'edit', 'fmt', 'get', 'getname',
             'gettype', 'items', 'keys', 'load', 'merge', 'overlay', 'register',
-            'save', 'search', 'set', 'spl', 'update', 'values', 'wd')
+            'save', 'search', 'set', 'spl', 'update', 'values')
 
 def cdir(path):
     if os.path.exists(path):
@@ -123,9 +123,6 @@ class Obj(O):
         return self.__dict__.values()
 
 class Object(Obj):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def json(self):
         return repr(self)

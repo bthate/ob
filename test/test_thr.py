@@ -15,14 +15,6 @@ from prm import param
 
 class Test_Threaded(unittest.TestCase):
 
-    def setUp(self):
-        cfg.wd = ".test"
-        k.stop()
-        k.start()
-        
-    def TearDown(self):
-        k.stop()
- 
     def test_thrs(self):
         thrs = []
         for x in range(Kernel.cfg.index or 1):
@@ -54,5 +46,5 @@ def exec():
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
             e = c.event(cmd+" "+ex)
-            C.handle(e)
+            c.handle(e)
             events.append(e)

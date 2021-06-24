@@ -3,8 +3,10 @@
 
 name = "ob"
 
+from ob.bus import Bus
 from ob.clt import Client
-from ob.krn import Kernel, Table, cfg, os, wrap
+from ob.krn import Kernel, Table, os, wrap
+from ob.obj import cfg
 from ob.tbl import builtin
 
 import doctest
@@ -13,7 +15,6 @@ import shutil
 import unittest
 
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
-resume = {}
 
 class Test(Client):
 
@@ -24,14 +25,14 @@ class Test(Client):
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
-    cfg.debug = True
     cfg.wd = ".test"
-    c = Test()
-    c.start()
+    cfg.debug = True
     k = Kernel()
+    Kernel.cfg.pkgs = "ob,om,on,oe"
     k.boot(name)
     k.start()
-    builtin("k", k)
+    c = Test()
+    c.start()
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)
