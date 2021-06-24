@@ -54,8 +54,8 @@ class Kernel(Table, Handler):
         except PermissionError:
             pass
         self.privileges()
-        self.scan(self.cfg.pkgs or "om")
-        self.init(self.cfg.mods)
+        self.scan(self.cfg.p)
+        self.init(self.cfg.m)
 
     def cmd(self, clt, txt):
         Bus.add(clt)
@@ -144,7 +144,3 @@ class Kernel(Table, Handler):
     def wait():
         while 1:
             time.sleep(5.0)
-
-
-def kernel():
-    print(sys.modules)

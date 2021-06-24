@@ -38,13 +38,14 @@ class Console(CLI):
 def main():
     cfg.wd = os.path.expanduser("~/.%s" % name)
     k = Kernel()
-    builtin("k", k)
     k.boot(name)
     k.start()
-    if k.cfg.txt:
+    builtin("k", k)
+    import ob.all
+    if k.cfg.txt and not k.opts("c"):
         c = CLI()
         return k.cmd(c, k.cfg.otxt)
-    if k.opts("c"):
+    if k.cfg.m or k.opts("c"):
         c = Console()
         c.start()
         k.wait()

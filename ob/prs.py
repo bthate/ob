@@ -152,10 +152,10 @@ def parse_txt(o, ptxt=None):
             continue
         args.append(token.txt)
     if not args:
-        o.args = o.args or []
-        o.cmd = o.cmd or ""
-        o.rest = o.rest or ""
-        o.txt = o.txt or ""
+        o.args = []
+        o.cmd = ""
+        o.rest = ""
+        o.txt = ""
         return o
     o.cmd = args[0]
     o.args = args[1:]

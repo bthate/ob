@@ -488,7 +488,7 @@ def QUIT(hdl, obj):
 def cfg(event):
     c = Cfg()
     last(c)
-    event.sets.delkeys(["pkgs", "mods"])
+    event.sets.delkeys(["p", "m"])
     if not event.sets:
         return event.reply(fmt(c, skip=["username", "realname"]))
     edit(c, event.sets)
