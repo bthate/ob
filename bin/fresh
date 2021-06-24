@@ -1,1 +1,1 @@
-apt install joe git irssi ircd-irc2 python3-setuptools python3-virtualenv python3-sphinx python3-feedparser gnome-tweaks twine papirus-icon-theme
+apt install joe git irssi ircd-irc2 python3-setuptools python3-virtualenv python3-sphinx python3-feedparser gnome-tweaks twine papirus-icon-theme tilix openssh-server vlc
