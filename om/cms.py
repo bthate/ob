@@ -3,5 +3,5 @@
 def __dir__():
     return ("cmd",)
 
-def cmd(event):
+def cmd(clt, event):
     event.reply(",".join(sorted(k.modules)))

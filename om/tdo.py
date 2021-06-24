@@ -12,7 +12,7 @@ class Todo(Object):
         super().__init__()
         self.txt = ""
 
-def dne(event):
+def dne(clt, event):
     if not event.args:
         event.reply("dne txt==<string>")
         return
@@ -22,7 +22,7 @@ def dne(event):
         event.reply("ok")
         break
 
-def tdo(event):
+def tdo(clt, event):
     if not event.rest:
         event.reply("tdo <txt>")
         return

@@ -18,22 +18,12 @@ class Handler(Object):
         self.queue = queue.Queue()
         self.speed = "normal"
         self.stopped = threading.Event()
-        self.register("cmd", Handler.dispatch)
 
-    def callbacks(self, event):
+    def callbacks(self, clt, event):
         if event and event.type in self.cbs:
-            self.cbs[event.type](self, event)
+            self.cbs[event.type](clt, event)
         else:
             event.ready()
-
-    @staticmethod
-    def dispatch(hdl, obj):
-        obj.parse()
-        f = self.getcmd(obj.cmd)
-        if f:
-            f(obj)
-            obj.show()
-        obj.ready()
 
     def error(self, event):
         pass
@@ -44,16 +34,17 @@ class Handler(Object):
         c.orig = self.__dorepr__()
         return c
 
-    def handle(self, e):
-        self.queue.put(e)
+    def handle(self, clt, e):
+        self.queue.put((clt, e))
 
     def dispatcher(self):
         dorestart = False
         self.stopped.clear()
         while not self.stopped.isSet():
-            e = self.queue.get()
+            clt, e = self.queue.get()
+            print(type(clt))
             try:
-                self.callbacks(e)
+                self.callbacks(clt, e)
             except Restart:
                 dorestart = True
                 break
@@ -71,8 +62,8 @@ class Handler(Object):
         self.stop()
         self.start()
 
-    def put(self, e):
-        self.queue.put_nowait(e)
+    def put(self, clt, e):
+        self.queue.put_nowait((clt, e))
 
     def register(self, name, callback):
         self.cbs[name] = callback
@@ -82,6 +73,7 @@ class Handler(Object):
         self.start()
 
     def start(self):
+        self.register("cmd", k.dispatch)
         launch(self.dispatcher)
         return self
 

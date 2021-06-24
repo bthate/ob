@@ -187,8 +187,8 @@ class IRC(Handler, Client, Output):
     def fileno(self):
         return self.sock.fileno()
 
-    def handle(self, e):
-        super().callbacks(e)
+    def handle(self, clt, e):
+        super().callbacks(clt, e)
 
     def joinall(self):
         for channel in self.channels:
@@ -448,24 +448,24 @@ class Users(Object):
             user.save()
         return user
 
-def ERROR(hdl, obj):
-    hdl.state.nrerror += 1
-    hdl.state.error = obj.error
+def ERROR(clt, obj):
+    clt.state.nrerror += 1
+    clt.state.error = obj.error
 
-def KILL(hdl, obj):
+def KILL(clt, obj):
     pass
 
-def LOG(hdl, obj):
+def LOG(clt, obj):
     pass
 
-def NOTICE(hdl, obj):
+def NOTICE(clt, obj):
     if obj.txt.startswith("VERSION"):
-        txt = "\001VERSION %s %s - %s\001" % (hdl.cfg.name.upper(), hdl.cfg.version or 1, hdl.cfg.username or "obt")
-        hdl.command("NOTICE", obj.channel, txt)
+        txt = "\001VERSION %s %s - %s\001" % (clt.cfg.name.upper(), clt.cfg.version or 1, clt.cfg.username or "obt")
+        clt.command("NOTICE", obj.channel, txt)
 
-def PRIVMSG(hdl, obj):
+def PRIVMSG(clt, obj):
     if obj.txt.startswith("DCC CHAT"):
-        if hdl.cfg.users and not hdl.users.allowed(obj.origin, "USER"):
+        if clt.cfg.users and not clt.users.allowed(obj.origin, "USER"):
             return
         try:
             dcc = DCC()
@@ -474,18 +474,18 @@ def PRIVMSG(hdl, obj):
         except ConnectionError as ex:
             return
     if obj.txt:
-        if obj.txt[0] in [hdl.cfg.cc, "!"]:
+        if obj.txt[0] in [clt.cfg.cc, "!"]:
             obj.txt = obj.txt[1:]
-        elif obj.txt.startswith("%s:" % hdl.cfg.nick):
-            obj.txt = obj.txt[len(hdl.cfg.nick)+1:]
-        if hdl.cfg.users and not hdl.users.allowed(obj.origin, "USER"):
+        elif obj.txt.startswith("%s:" % clt.cfg.nick):
+            obj.txt = obj.txt[len(clt.cfg.nick)+1:]
+        if clt.cfg.users and not clt.users.allowed(obj.origin, "USER"):
             return
         obj.type = "cmd"
-        hdl.put(obj)
+        k.put(clt,obj)
 
-def QUIT(hdl, obj):
-    if obj.orig and obj.orig in hdl.zelf:
-        hdl.reconnect()
+def QUIT(clt, obj):
+    if obj.orig and obj.orig in clt.zelf:
+        clt.reconnect()
 
 def cfg(event):
     c = Cfg()

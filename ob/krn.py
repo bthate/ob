@@ -12,7 +12,7 @@ import time
 
 from .bus import Bus
 from .dft import Default
-from .int import builtin, find_cls, find_cmd, find_func
+from .int import find_cls, find_cmd, find_func
 from .obj import Object, cdir, cfg, spl
 from .prs import parse_txt
 from .hdl import Handler
@@ -22,7 +22,7 @@ from .thr import launch
 from .ver import __version__
 
 def __dir__():
-    return ('Cfg', 'Kernel')
+    return ('Cfg', 'Kernel', 'builtin')
 
 class Cfg(Default):
 
@@ -69,7 +69,7 @@ class Kernel(Table, Handler):
         obj.parse()
         f = self.getcmd(obj.cmd)
         if f:
-            f(obj)
+            f(clt, obj)
             obj.show()
         obj.ready()
 
@@ -117,7 +117,7 @@ class Kernel(Table, Handler):
             return False
         return True
 
-    def reserved(m):
+    def reserved(self, m):
         self.addmod(m)
         classes = find_cls(m)
         for nm, c in classes.items():
@@ -128,7 +128,6 @@ class Kernel(Table, Handler):
         functions = find_func(m)
         for nm, f in functions.items():
             builtin(nm, f)
-
 
     def scan(self, pkgs):
         for pn in spl(pkgs):

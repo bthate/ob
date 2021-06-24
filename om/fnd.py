@@ -9,6 +9,9 @@ from ob.obj import cfg, fmt
 def __dir__():
     return ("fnd",)
 
+def kernel():
+    return k
+
 def fnd(event):
     if not event.args:
         fls = listfiles(cfg.wd)
@@ -23,6 +26,7 @@ def fnd(event):
     except IndexError:
         pass
     got = False
+    k = kernel()
     otypes = k.getnames(otype, [otype,])
     for fn, o in find(otypes, event.gets, event.index, event.timed):
         nr += 1

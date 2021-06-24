@@ -11,7 +11,7 @@ class Log(Object):
         super().__init__()
         self.txt = ""
 
-def log(event):
+def log(clt, event):
     if not event.rest:
         event.reply("log <txt>")
         return

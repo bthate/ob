@@ -6,6 +6,8 @@ import inspect
 def builtin(nm, o):
     setattr(builtins, nm, o)
 
+do = ["cfg", "k", "wrap"]
+
 def find_cls(mod):
     res = {}
     pn = mod.__package__
@@ -24,7 +26,7 @@ def find_cmd(mod):
 def find_func(mod):
     res = {}
     for key, o in inspect.getmembers(mod, inspect.isfunction):
-        if key in reserved:
+        if key in do:
             if "event" not in o.__code__.co_varnames:
                 res[o.__name__] = o
     return res

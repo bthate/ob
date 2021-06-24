@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-name = "ob"
-
-import builtins
-import os
-import readline
-import sys
-
 from ob.krn import Kernel, builtin
 
 k = Kernel()
 builtin("k", k)
+import ob.all
 
-from ob.clt import Client
-from ob.int import builtin
-from ob.krn import Kernel
-from ob.obj import cfg
-from ob.trm import wrap
+import os
+import readline
+import sys
+
+name = "ob"
 
 def cprint(*args):
     print(*args)
@@ -34,8 +28,8 @@ class CLI(Client):
 
 class Console(CLI):
 
-    def handle(self, e):
-        super().handle(e)
+    def handle(self, clt, e):
+        k.put(clt, e)
         e.wait()
 
     def poll(self):
@@ -43,10 +37,8 @@ class Console(CLI):
 
 def main():
     cfg.wd = os.path.expanduser("~/.%s" % name)
-    k = Kernel()
     k.boot(name)
     k.start()
-    builtin("k", k)
     if k.cfg.txt and (not k.opts("c") or not k.cfg.m):
         c = CLI()
         return k.cmd(c, k.cfg.otxt)

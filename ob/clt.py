@@ -26,8 +26,8 @@ class Client(Object):
         c.orig = self.__dorepr__()
         return c
 
-    def handle(self, e):
-        self.target.dispatch(self, e)
+    def handle(self, clt, e):
+        self.target.put(clt, e)
 
     def handler(self):
         while not self.stopped.isSet():
@@ -37,7 +37,7 @@ class Client(Object):
             e = self.event(txt)
             if not e:
                 break
-            self.handle(e)
+            self.handle(self, e)
 
     def poll(self):
         return self.iqueue.get()
