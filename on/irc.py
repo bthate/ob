@@ -187,8 +187,8 @@ class IRC(Handler, Client, Output):
     def fileno(self):
         return self.sock.fileno()
 
-    def handle(self, clt, e):
-        super().callbacks(clt, e)
+    def handle(self, e):
+        super().callbacks(e)
 
     def joinall(self):
         for channel in self.channels:
@@ -389,8 +389,8 @@ class DCC(Handler, Client):
         e.sock = self.sock
         return e
 
-    def handle(self, clt, e):
-        k.dispatch(clt, e)
+    def handle(self, e):
+        k.dispatch(e)
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")
@@ -460,7 +460,7 @@ def LOG(clt, obj):
 
 def NOTICE(clt, obj):
     if obj.txt.startswith("VERSION"):
-        txt = "\001VERSION %s %s - %s\001" % (clt.cfg.name.upper(), clt.cfg.version or 1, clt.cfg.username or "obt")
+        txt = "\001VERSION %s %s - %s\001" % (clt.cfg.name.upper(), clt.cfg.version or 1, clt.cfg.username or "ob")
         clt.command("NOTICE", obj.channel, txt)
 
 def PRIVMSG(clt, obj):

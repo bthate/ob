@@ -22,7 +22,7 @@ def dne(clt, event):
         event.reply("ok")
         break
 
-def tdo(clt, event):
+def tdo(event):
     if not event.rest:
         event.reply("tdo <txt>")
         return

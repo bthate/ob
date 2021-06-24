@@ -12,7 +12,7 @@ def __dir__():
 
 starttime = time.time()
 
-def flt(clt, event):
+def flt(event):
     try:
         index = int(event.args[0])
         event.reply(fmt(Bus.objs[index], skip=["queue", "ready", "iqueue"]))
@@ -21,7 +21,7 @@ def flt(clt, event):
         pass
     event.reply(" | ".join([getname(o) for o in Bus.objs]))
 
-def krn(clt, event):
+def krn(event):
     if not event.args:
         event.reply(fmt(k.cfg, skip=["otxt", "opts", "sets", "old", "res"]))
         return
@@ -29,7 +29,7 @@ def krn(clt, event):
     k.cfg.save()
     event.reply("ok")
 
-def thr(clt, event):
+def thr(event):
     psformat = "%s %s"
     result = []
     for thr in sorted(threading.enumerate(), key=lambda x: x.getName()):
@@ -52,8 +52,8 @@ def thr(clt, event):
     if res:
         event.reply(" ".join(res))
 
-def upt(clt, event):
+def upt(event):
     event.reply("uptime is %s" % elapsed(time.time() - starttime))
 
-def ver(clt, event):
+def ver(event):
     event.reply("%s %s" % (k.cfg.name.upper(), k.cfg.version))

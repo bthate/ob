@@ -4,7 +4,7 @@ import time
 
 from ob.dbs import find, listfiles, fntime
 from ob.prs import elapsed
-from ob.obj import cfg, fmt
+from ob.obj import fmt
 
 def __dir__():
     return ("fnd",)

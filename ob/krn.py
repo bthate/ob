@@ -3,7 +3,6 @@
 import builtins
 import getpass
 import importlib
-import ob
 import os
 import pkgutil
 import pwd
@@ -13,7 +12,7 @@ import time
 from .bus import Bus
 from .dft import Default
 from .int import find_cls, find_cmd, find_func
-from .obj import Object, cdir, cfg, spl
+from .obj import Object, cdir, spl
 from .prs import parse_txt
 from .hdl import Handler
 from .tbl import Table
@@ -33,14 +32,14 @@ class Kernel(Table, Handler):
     def __init__(self):
         Table.__init__(self)
         Handler.__init__(self)
-
-    def boot(self, name, version=__version__):
         self.cfg = Cfg()
-        self.parse()
+
+    def boot(self, name, wd=None, version=__version__):
+        self.parse_cli()
         self.cfg.name = name
         self.cfg.version = version
         self.cfg.update(self.cfg.sets)
-        self.cfg.wd = cfg.wd = self.cfg.wd or cfg.wd
+        self.cfg.wd = wd or self.cfg.wd or ".ob"
         cdir(self.cfg.wd + os.sep)
         try:
             pwn = pwd.getpwnam(name)
@@ -58,18 +57,11 @@ class Kernel(Table, Handler):
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
 
-    def cmd(self, clt, txt):
-        Bus.add(clt)
-        e = clt.event(txt)
-        e.origin = "root@shell"
-        self.dispatch(clt, e)
-        e.wait()
-
-    def dispatch(self, clt, obj):
+    def dispatch(self, obj):
         obj.parse()
         f = self.getcmd(obj.cmd)
         if f:
-            f(clt, obj)
+            f(obj)
             obj.show()
         obj.ready()
 
@@ -86,7 +78,7 @@ class Kernel(Table, Handler):
                 return True
         return False
 
-    def parse(self):
+    def parse_cli(self):
         txt = " ".join(sys.argv[1:])
         o = Default()
         parse_txt(o, txt)
@@ -147,6 +139,3 @@ class Kernel(Table, Handler):
 
 def builtin(nm, o):
     setattr(builtins, nm, o)
-
-def kernel():
-    return k

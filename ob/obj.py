@@ -125,12 +125,12 @@ class Object(Obj):
         return repr(self)
 
     def load(self, opath):
-        assert cfg.wd
+        assert k.cfg.wd
         if opath.count(os.sep) != 3:
             raise NoFilenameError(opath)
         spl = opath.split(os.sep)
         stp = os.sep.join(spl[-4:])
-        lpath = os.path.join(cfg.wd, "store", stp)
+        lpath = os.path.join(k.cfg.wd, "store", stp)
         if os.path.exists(lpath):
             with open(lpath, "r") as ofile:
                 d = js.load(ofile, object_hook=Obj)
@@ -139,19 +139,15 @@ class Object(Obj):
         return self
 
     def save(self, tab=False):
-        assert cfg.wd
+        assert k.cfg.wd
         prv = os.sep.join(self.__stp__.split(os.sep)[:2])
         self.__stp__ = os.path.join(prv, os.sep.join(str(datetime.datetime.now()).split()))
-        opath = os.path.join(cfg.wd, "store", self.__stp__)
+        opath = os.path.join(k.cfg.wd, "store", self.__stp__)
         cdir(opath)
         with open(opath, "w") as ofile:
             js.dump(self, ofile, default=self.__default__, indent=4, sort_keys=True)
         os.chmod(opath, 0o444)
         return self.__stp__
-
-cfg = Object()
-cfg.debug = False
-cfg.wd = ""
 
 def edit(o, setter, skip=True, skiplist=[]):
     count = 0
@@ -219,12 +215,12 @@ def keys(o):
     return o.__dict__.keys()
 
 def load(o, opath):
-    assert cfg.wd
+    assert k.cfg.wd
     if opath.count(os.sep) != 3:
         raise NoFilenameError(opath)
     spl = opath.split(os.sep)
     stp = os.sep.join(spl[-4:])
-    lpath = os.path.join(cfg.wd, "store", stp)
+    lpath = os.path.join(k.cfg.wd, "store", stp)
     if os.path.exists(lpath):
         with open(lpath, "r") as ofile:
             d = js.load(ofile, object_hook=Obj)
@@ -255,10 +251,10 @@ def register(o, key, value):
     o[str(key)] = value
 
 def save(o, tab=False):
-    assert cfg.wd
+    assert k.cfg.wd
     prv = os.sep.join(o.__stp__.split(os.sep)[:2])
     o.__stp__ = os.path.join(prv, os.sep.join(str(datetime.datetime.now()).split()))
-    opath = os.path.join(cfg.wd, "store", o.__stp__)
+    opath = os.path.join(k.cfg.wd, "store", o.__stp__)
     cdir(opath)
     with open(opath, "w") as ofile:
         js.dump(o, ofile, default=o.__default__, indent=4, sort_keys=True)

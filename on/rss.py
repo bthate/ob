@@ -9,7 +9,7 @@ from ob.clk import Repeater
 from ob.dbs import all, find, last, lastmatch
 from ob.dft import Default
 from ob.thr import launch
-from ob.obj import Object, cfg, edit
+from ob.obj import Object, edit
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode

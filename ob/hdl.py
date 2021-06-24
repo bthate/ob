@@ -19,9 +19,9 @@ class Handler(Object):
         self.speed = "normal"
         self.stopped = threading.Event()
 
-    def callbacks(self, clt, event):
+    def callbacks(self, event):
         if event and event.type in self.cbs:
-            self.cbs[event.type](clt, event)
+            self.cbs[event.type](self, event)
         else:
             event.ready()
 
@@ -34,17 +34,16 @@ class Handler(Object):
         c.orig = self.__dorepr__()
         return c
 
-    def handle(self, clt, e):
-        self.queue.put((clt, e))
+    def handle(selfe):
+        self.queue.put(e)
 
     def dispatcher(self):
         dorestart = False
         self.stopped.clear()
         while not self.stopped.isSet():
-            clt, e = self.queue.get()
-            print(type(clt))
+            e = self.queue.get()
             try:
-                self.callbacks(clt, e)
+                self.callbacks(e)
             except Restart:
                 dorestart = True
                 break
@@ -62,8 +61,8 @@ class Handler(Object):
         self.stop()
         self.start()
 
-    def put(self, clt, e):
-        self.queue.put_nowait((clt, e))
+    def put(self, e):
+        self.queue.put_nowait(e)
 
     def register(self, name, callback):
         self.cbs[name] = callback

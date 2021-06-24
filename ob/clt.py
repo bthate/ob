@@ -5,7 +5,6 @@ import threading
 
 from .bus import Bus
 from .evt import Command
-from .krn import kernel
 from .obj import Object
 from .thr import launch
 
@@ -16,7 +15,13 @@ class Client(Object):
         self.iqueue = queue.Queue()
         self.speed = "normal"
         self.stopped = threading.Event()
-        self.target = None
+
+    def cmd(self, txt):
+        Bus.add(self)
+        e = self.event(txt)
+        e.origin = "root@shell"
+        k.dispatch(e)
+        e.wait()
 
     def event(self, txt):
         if txt is None:
@@ -26,8 +31,8 @@ class Client(Object):
         c.orig = self.__dorepr__()
         return c
 
-    def handle(self, clt, e):
-        self.target.put(clt, e)
+    def handle(self, e):
+        k.put(e)
 
     def handler(self):
         while not self.stopped.isSet():
@@ -37,7 +42,7 @@ class Client(Object):
             e = self.event(txt)
             if not e:
                 break
-            self.handle(self, e)
+            self.handle(e)
 
     def poll(self):
         return self.iqueue.get()

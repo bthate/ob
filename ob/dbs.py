@@ -33,7 +33,6 @@ def deleted(otype):
             yield fn, o
 
 def every(selector=None, index=None, timed=None):
-    from .obj import cfg
     if selector is None:
         selector = {}
     nr = -1
@@ -98,7 +97,6 @@ def lastfn(otype):
     return (None, None)
 
 def fns(name, timed=None):
-    from .obj import cfg
     if not name:
         return []
     p = os.path.join(cfg.wd, "store", name) + os.sep
