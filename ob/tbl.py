@@ -72,3 +72,18 @@ class Table(Object):
         commands = find_cmd(mod)
         for nm, c in commands.items():
             self.addcmd(c)
+
+    def reserved(self, m):
+        self.addmod(m)
+        classes = find_cls(m)
+        for nm, c in classes.items():
+            builtin(nm, c)
+        commands = find_cmd(m)
+        for nm, c in commands.items():
+            builtin(nm, c)
+        functions = find_func(m)
+        for nm, f in functions.items():
+            builtin(nm, f)
+
+def builtin(nm, o):
+    setattr(builtins, nm, o)

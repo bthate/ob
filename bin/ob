@@ -3,8 +3,9 @@
 
 import os, sys ; sys.path.insert(0, os.getcwd())
 
-from ob.hdl import Handler
+from ob.clt import Client
 from ob.krn import k
+from ob.lop import Loop
 from ob.trm import wrap
 
 import os
@@ -18,7 +19,7 @@ def cprint(*args):
     print(*args)
     sys.stdout.flush()
 
-class CLI(Handler):
+class CLI(Client):
 
     def error(self, e):
         cprint(e.exc)
@@ -29,7 +30,7 @@ class CLI(Handler):
 
 class Console(CLI):
 
-    def handle(self, e):
+    def do(self, e):
         k.dispatch(self, e)
         e.wait()
 
@@ -43,7 +44,7 @@ def main():
     wait = k.opts("c") or k.cfg.m
     if k.cfg.txt and not wait:
         c = CLI()
-        return c.cmd(k.cfg.otxt)
+        return k.cmd(c, k.cfg.otxt)
     if wait:
         c = Console()
         c.start()

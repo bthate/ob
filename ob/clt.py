@@ -1,16 +1,19 @@
 # This file is placed in the Public Domain.
 
 from .bus import Bus
+from .lop import Loop
 from .dpt import Dispatcher
 from .evt import Command
+from .krn import k
 
 def __dir__():
-    return ('Handler',) 
+    return ('Client',) 
 
-class Handler(Dispatcher):
+class Client(Dispatcher, Loop):
 
     def __init__(self):
-        super().__init__()
+        Dispatcher.__init__(self)
+        Loop.__init__(self)
         self.speed = "normal"
 
     def cmd(self, txt):
@@ -19,6 +22,9 @@ class Handler(Dispatcher):
         e.origin = "root@shell"
         self.dispatch(e)
         e.wait()
+
+    def do(self, e):
+        k.dispatch(e)
 
     def event(self, txt):
         if txt is None:
@@ -31,7 +37,7 @@ class Handler(Dispatcher):
     def handle(self, e):
         k.put(e)
 
-    def handler(self):
+    def loop(self):
         while not self.stopped.isSet():
             txt = self.poll()
             if txt is None:
