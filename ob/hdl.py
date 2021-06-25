@@ -1,83 +1,51 @@
 # This file is placed in the Public Domain.
 
 from .bus import Bus
-from .err import Restart, Stop
-from .evt import Command, Event
-from .obj import Object
-from .thr import launch
-from .trc import get_exception
-
-import queue
-import threading
+from .dpt import Dispatcher
+from .evt import Command
 
 def __dir__():
-    return ('Handler',)
+    return ('Handler',) 
 
-class Handler(Object):
+class Handler(Dispatcher):
 
     def __init__(self):
         super().__init__()
-        self.cbs = Object()
-        self.queue = queue.Queue()
         self.speed = "normal"
-        self.stopped = threading.Event()
 
-    def callbacks(self, event):
-        if event and event.type in self.cbs:
-            self.cbs[event.type](self, event)
-        else:
-            event.ready()
-
-    def error(self, event):
-        pass
+    def cmd(self, txt):
+        Bus.add(self)
+        e = self.event(txt)
+        e.origin = "root@shell"
+        self.dispatch(e)
+        e.wait()
 
     def event(self, txt):
+        if txt is None:
+            return
         c = Command()
         c.txt = txt or ""
         c.orig = self.__dorepr__()
         return c
 
-    def handle(selfe):
-        self.queue.put(e)
+    def handle(self, e):
+        k.put(e)
 
-    def dispatcher(self):
-        dorestart = False
-        self.stopped.clear()
+    def handler(self):
         while not self.stopped.isSet():
-            e = self.queue.get()
-            try:
-                self.callbacks(e)
-            except Restart:
-                dorestart = True
+            txt = self.poll()
+            if txt is None:
                 break
-            except Stop:
+            e = self.event(txt)
+            if not e:
                 break
-            except Exception as ex:
-                e = Event()
-                e.type = "error"
-                e.exc = get_exception()
-                self.error(e)
-        if dorestart:
-            self.restart()
+            self.handle(e)
 
-    def restart(self):
-        self.stop()
-        self.start()
+    def poll(self):
+        return self.queue.get()
 
-    def put(self, e):
-        self.queue.put_nowait(e)
+    def raw(self, txt):
+        pass
 
-    def register(self, name, callback):
-        self.cbs[name] = callback
-
-    def restart(self):
-        self.stop()
-        self.start()
-
-    def start(self):
-        launch(self.dispatcher)
-        return self
-
-    def stop(self):
-        self.stopped.set()
-        self.queue.put(None)
+    def say(self, channel, txt):
+        self.raw(txt)

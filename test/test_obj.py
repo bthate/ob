@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 from ob.dbs import find, last
-from ob.obj import O, Object, gettype, merge
+from ob.obj import O, Object, gettype
 
 import os
 import unittest

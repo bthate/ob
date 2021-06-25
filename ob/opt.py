@@ -9,10 +9,9 @@ from .thr import launch
 
 class Output(Object):
 
-    cache = List()
-
     def __init__(self):
         super().__init__()
+        self.cache = List()
         self.oqueue = queue.Queue()
         self.stopped = threading.Event()
         

@@ -27,7 +27,7 @@ def main():
         shutil.rmtree(".test")
     k.cfg.wd = ".test"
     k.cfg.debug = True
-    k.cfg.pkgs = "ob,om,on,oe"
+    k.cfg.p = "ob,om,on,oe"
     k.boot(name)
     k.start()
     c = Test()

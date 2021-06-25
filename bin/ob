@@ -3,7 +3,7 @@
 
 import os, sys ; sys.path.insert(0, os.getcwd())
 
-from ob.clt import Client
+from ob.hdl import Handler
 from ob.krn import k
 from ob.trm import wrap
 
@@ -18,7 +18,7 @@ def cprint(*args):
     print(*args)
     sys.stdout.flush()
 
-class CLI(Client):
+class CLI(Handler):
 
     def error(self, e):
         cprint(e.exc)

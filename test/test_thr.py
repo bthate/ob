@@ -6,7 +6,7 @@ import unittest
 
 from ob.bus import Bus
 from ob.evt import Command
-from ob.obj import cfg
+from ob.krn import k
 from ob.tbl import Table
 from ob.thr import launch
 from ob.krn import Kernel
@@ -17,7 +17,7 @@ class Test_Threaded(unittest.TestCase):
 
     def test_thrs(self):
         thrs = []
-        for x in range(Kernel.cfg.index or 1):
+        for x in range(k.cfg.index or 1):
             thr = launch(exec)
             thrs.append(thr)
         for thr in thrs:
@@ -46,5 +46,5 @@ def exec():
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
             e = c.event(cmd+" "+ex)
-            c.handle(e)
+            k.put(e)
             events.append(e)

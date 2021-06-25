@@ -19,6 +19,10 @@ class NoUser(Exception):
 
     pass
 
+class NotImplemented(Exception):
+
+    pass
+
 class Restart(Exception):
 
     pass
