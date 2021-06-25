@@ -3,7 +3,7 @@
 import queue
 import threading
 
-from .err import NotImplemented
+from .err import NotImplemented, Restart, Stop
 from .evt import Event
 from .obj import Object
 from .thr import launch
@@ -17,6 +17,7 @@ class Loop(Object):
     def __init__(self):
         super().__init__()
         self.queue = queue.Queue()
+        self.speed = "normal"
         self.stopped = threading.Event()
 
     def do(self, e):

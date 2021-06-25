@@ -30,14 +30,18 @@ class CLI(Client):
 
 class Console(CLI):
 
-    def do(self, e):
-        k.dispatch(self, e)
+    def handle(self, e):
+        k.put(e)
         e.wait()
 
     def poll(self):
         return input("> ")
 
+def error(hdl, e):
+    cprint(e.exc)
+    
 def main():
+    k.error = error
     k.cfg.p = "om"
     k.boot(name, wd)
     k.start()

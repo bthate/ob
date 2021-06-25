@@ -4,6 +4,7 @@ import threading
 
 from .bus import Bus
 from .dft import Default
+from .err import NoBot
 from .opt import Output
 from .prs import parse_txt
 
@@ -45,6 +46,8 @@ class Event(Default):
             self.say(self.exc)
             return
         bot = self.bot()
+        if not bot:
+            raise NoBot(self.orig)
         if bot.speed == "slow" and len(self.result) > 3:
             Output.append(self.channel, self.result)
             self.say("%s lines in cache, use !mre" % len(self.result))

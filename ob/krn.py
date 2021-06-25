@@ -67,7 +67,10 @@ class Kernel(Table, Dispatcher, Loop):
         e.wait()
 
     def do(self, e):
-        self.dispatch(self, e)
+        self.dispatch(e)
+
+    def error(self, e):
+        pass
 
     def handle(self, hdl, obj):
         obj.parse()

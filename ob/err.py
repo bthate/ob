@@ -3,6 +3,10 @@
 def __dir__():
     return ('NoClass', 'NoType', 'NoText', 'NoUser', 'Restart', 'Stop')
 
+class NoBot(Exception):
+
+    pass
+
 class NoClass(Exception):
 
     pass
