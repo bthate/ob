@@ -13,7 +13,6 @@ from ob.clt import Client
 from ob.dbs import find, last
 from ob.dft import Default
 from ob.evt import Event
-from ob.hdl import Handler
 from ob.krn import k
 from ob.opt import Output
 from ob.thr import launch
@@ -82,10 +81,9 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Handler, Client, Output):
+class IRC(Client, Output):
 
     def __init__(self):
-        Handler.__init__(self)
         Client.__init__(self)
         Output.__init__(self)
         self.buffer = []
@@ -321,7 +319,6 @@ class IRC(Handler, Client, Output):
                        int(self.cfg.port))
         self.connected.wait()
         Client.start(self)
-        Handler.start(self)
         Output.start(self)
         Bus.add(self)
         if not self.keeprunning:
@@ -334,14 +331,13 @@ class IRC(Handler, Client, Output):
             self.sock.shutdown(2)
         except OSError:
             pass
-        Handler.stop(self)
         Client.stop(self)
         Output.stop(self)
 
     def wait(self):
         self.joined.wait()
 
-class DCC(Handler, Client):
+class DCC(Client):
 
     def __init__(self):
         super().__init__()
@@ -394,10 +390,6 @@ class DCC(Handler, Client):
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")
-
-    def start(self):
-        Handler.start(self)
-        Client.start(self)
 
 class User(Object):
 
