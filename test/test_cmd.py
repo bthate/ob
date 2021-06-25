@@ -4,7 +4,7 @@ import random
 import unittest
 
 from ob.bus import Bus
-from ob.krn import Kernel
+from ob.krn import k
 from ob.tbl import Table
 
 from prm import param
@@ -12,7 +12,7 @@ from prm import param
 class Test_Cmd(unittest.TestCase):
 
     def test_cmds(self):
-        for x in range(Kernel.cfg.index or 1):
+        for x in range(k.cfg.index or 1):
             exec()
         consume()
 
@@ -33,7 +33,7 @@ def consume():
 
 def exec():
     c = Bus.first()
-    l = list(Table.modules)
+    l = list(k.modules)
     random.shuffle(l)
     for cmd in l:
         for ex in getattr(param, cmd, [""]):

@@ -5,15 +5,15 @@ import sys
 import unittest
 
 from ob.bus import Bus
-from ob.evt import Command
 from ob.krn import k
-from ob.tbl import Table
 from ob.thr import launch
-from ob.krn import Kernel
 
 from prm import param
 
 class Test_Threaded(unittest.TestCase):
+
+    def setUp(self):
+        k.cfg.wd = ".test"
 
     def test_thrs(self):
         thrs = []
@@ -41,7 +41,7 @@ def consume():
 
 def exec():
     c = Bus.first()
-    l = list(Table.modules)
+    l = list(k.modules)
     random.shuffle(l)
     for cmd in l:
         for ex in getattr(param, cmd, [""]):

@@ -12,6 +12,7 @@ from ob.bus import Bus
 from ob.clt import Client
 from ob.dbs import find, last
 from ob.dft import Default
+from ob.dpt import Dispatcher
 from ob.evt import Event
 from ob.krn import k
 from ob.opt import Output
@@ -81,11 +82,11 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Client, Output):
+class IRC(Client):
 
     def __init__(self):
-        Client.__init__(self)
         Output.__init__(self)
+        Client.__init__(self)
         self.buffer = []
         self.cfg = Cfg()
         self.connected = threading.Event()

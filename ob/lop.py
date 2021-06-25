@@ -15,7 +15,7 @@ def __dir__():
 class Loop(Object):
 
     def __init__(self):
-        super().__init__()
+        Object.__init__(self)
         self.queue = queue.Queue()
         self.speed = "normal"
         self.stopped = threading.Event()

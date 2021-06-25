@@ -57,6 +57,6 @@ class Client(Dispatcher, Loop):
         self.raw(txt)
 
     def start(self):
-        super().start()
+        Loop.start(self)
         Bus.add(self)
         

@@ -10,7 +10,7 @@ from .thr import launch
 class Output(Object):
 
     def __init__(self):
-        super().__init__()
+        Object.__init__(self)
         self.cache = List()
         self.oqueue = queue.Queue()
         self.stopped = threading.Event()

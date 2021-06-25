@@ -20,15 +20,22 @@ class Test(Client):
 
     def raw(self, txt):
         if Kernel.opts("v"):
-            print(txt)
+            cprint(txt)
+
+def cprint(*args):
+    print(*args)
+    sys.stdout.flush()
+
+def error(hdl, obj):
+    cprint(obj.trc)
 
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
-    k.cfg.wd = ".test"
+    k.error = error
     k.cfg.debug = True
     k.cfg.p = "ob,om,on,oe"
-    k.boot(name)
+    k.boot(name, '.test')
     k.start()
     c = Test()
     c.start()

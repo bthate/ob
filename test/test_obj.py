@@ -1,12 +1,16 @@
 # This file is placed in the Public Domain.
 
 from ob.dbs import find, last
+from ob.krn import k
 from ob.obj import O, Object, gettype
 
 import os
 import unittest
 
 class Test_Object(unittest.TestCase):
+
+    def setUp(self):
+        k.cfg.wd = ".test"
 
     def test_O(self):
         o = O()
