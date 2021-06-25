@@ -30,7 +30,7 @@ class CLI(Client):
 class Console(CLI):
 
     def handle(self, e):
-        k.dispatch(e)
+        k.dispatch(self, e)
         e.wait()
 
     def poll(self):

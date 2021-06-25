@@ -24,7 +24,7 @@ class Client(Object):
         Bus.add(self)
         e = self.event(txt)
         e.origin = "root@shell"
-        k.dispatch(e)
+        k.dispatch(self, e)
         e.wait()
 
     def event(self, txt):

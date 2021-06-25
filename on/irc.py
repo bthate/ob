@@ -309,7 +309,6 @@ class IRC(Handler, Client, Output):
         self.state.lastline = splitted[-1]
 
     def start(self):
-        self.register("cmd", k.dispatch)
         last(self.cfg)
         if self.cfg.channel not in self.channels:
             self.channels.append(self.cfg.channel)
@@ -391,7 +390,7 @@ class DCC(Handler, Client):
         return e
 
     def handle(self, e):
-        k.dispatch(e)
+        k.dispatch(self, e)
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")

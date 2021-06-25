@@ -75,8 +75,6 @@ class Handler(Object):
         self.start()
 
     def start(self):
-        from .krn import k
-        self.register("cmd", k.dispatch)
         launch(self.dispatcher)
         return self
 

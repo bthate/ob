@@ -57,7 +57,7 @@ class Kernel(Table, Handler):
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
 
-    def dispatch(self, obj):
+    def dispatch(self, hdl, obj):
         obj.parse()
         f = self.getcmd(obj.cmd)
         if f:
@@ -131,6 +131,10 @@ class Kernel(Table, Handler):
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])
                 self.introspect(mod)
+
+    def start(self):
+        super().start()
+        self.register("cmd", self.dispatch)
 
     @staticmethod
     def wait():
