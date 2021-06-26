@@ -16,7 +16,7 @@ def find_cls(mod):
     res = {}
     pn = mod.__package__
     for key, o in inspect.getmembers(mod, inspect.isclass):
-        n = "%s.%s.%s" % (pn, o.__module__, o.__name__)
+        n = "%s.%s" % (o.__module__, o.__name__)
         res[n] = o
     return res
 

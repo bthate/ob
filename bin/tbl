@@ -1,30 +1,24 @@
+#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-import builtins
+import os, sys ; sys.path.insert(0, os.getcwd())
+
 import inspect
-import importlib
-import os
 import pkgutil
-import sys
 
-from .dft import Default
-from .err import NoClass
-from .int import find_cls, find_cmd, find_func
-from .obj import Object, spl
+def spl(txt):
+    return [x for x in txt.split(",") if x]
 
-def __dir__():
-    return ('Table',)
-
-class Table(Object):
+class Table(object):
 
     def __init__(self):
         super().__init__()
-        self.classes = Object()
-        self.cmds = Object()
-        self.fulls = Object()
-        self.names = Default()
-        self.modules = Object()
-        self.table = Object()
+        self.classes = {}
+        self.cmds = {}
+        self.fulls = {}
+        self.names = {}
+        self.modules = {}
+        self.table = {}
 
     def addcmd(self, func):
         n = func.__name__
@@ -74,19 +68,7 @@ class Table(Object):
         for nm, c in commands.items():
             self.addcmd(c)
 
-    def reserved(self, m):
-        self.addmod(m)
-        classes = find_cls(m)
-        for nm, c in classes.items():
-            builtin(nm, c)
-        commands = find_cmd(m)
-        for nm, c in commands.items():
-            builtin(nm, c)
-        functions = find_func(m)
-        for nm, f in functions.items():
-            builtin(nm, f)
-
-    def scan(self, pkgs):
+    def scan(self, pkgs=""):
         res = {}
         for pn in spl(pkgs):
             try:
@@ -99,5 +81,36 @@ class Table(Object):
                 res.update(find_cls(mod))
                 self.introspect(mod)
 
-def builtin(nm, o):
-    setattr(builtins, nm, o)
+def find_cls(mod):
+    res = {}
+    pn = mod.__package__
+    for key, o in inspect.getmembers(mod, inspect.isclass):
+        n = "%s.%s" % (o.__module__, o.__name__)
+        res[n] = o
+    return res
+
+def find_cmd(mod):
+    res = {}
+    for key, o in inspect.getmembers(mod, inspect.isfunction):
+        if o.__code__.co_argcount == 1 and "event" in o.__code__.co_varnames:
+            res[o.__name__] = o
+    return res
+
+def find_func(mod):
+    res = {}
+    for key, o in inspect.getmembers(mod, inspect.isfunction):
+        if key in do:
+            if "event" not in o.__code__.co_varnames:
+                res[o.__name__] = o
+    return res
+
+def main():
+    t = Table()
+    t.scan("om,on,od,oe,ob")
+    print(t.classes)
+    print(t.fulls)
+    print(t.names)
+    print(t.modules)
+
+if __name__ == "__main__":
+    main()

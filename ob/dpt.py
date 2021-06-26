@@ -8,7 +8,7 @@ def __dir__():
 class Dispatcher(Object):
 
     def __init__(self):
-        Object.__init__(self)
+        super().__init__()
         self.cbs = Object()
 
     def dispatch(self, event):

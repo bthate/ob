@@ -126,17 +126,6 @@ class Kernel(Table, Dispatcher, Loop):
             return False
         return True
 
-    def scan(self, pkgs):
-        for pn in spl(pkgs):
-            try:
-                mod = __import__(pn)
-            except ModuleNotFoundError:
-                return
-            for mn in pkgutil.walk_packages(mod.__path__, pn+"."):
-                zip = mn[0].find_module(mn[1])
-                mod = zip.load_module(mn[1])
-                self.introspect(mod)
-
     def start(self):
         super().start()
         self.register("cmd", self.handle)

@@ -11,11 +11,6 @@ def __dir__():
 
 class Client(Dispatcher, Loop):
 
-    def __init__(self):
-        Dispatcher.__init__(self)
-        Loop.__init__(self)
-        self.speed = "normal"
-
     def cmd(self, txt):
         Bus.add(self)
         e = self.event(txt)
@@ -52,7 +47,3 @@ class Client(Dispatcher, Loop):
 
     def say(self, channel, txt):
         self.raw(txt)
-
-    def start(self):
-        Loop.start(self)
-        Bus.add(self)
