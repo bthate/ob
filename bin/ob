@@ -36,7 +36,7 @@ class Console(CLI):
     def poll(self):
         return input("> ")
 
-def error(hdl, e):
+def error(e):
     cprint(e.exc)
     
 def main():

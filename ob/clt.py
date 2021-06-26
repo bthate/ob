@@ -47,3 +47,7 @@ class Client(Dispatcher, Loop):
 
     def say(self, channel, txt):
         self.raw(txt)
+
+    def start(self):
+        super().start()
+        Bus.add(self)
