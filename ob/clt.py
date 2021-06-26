@@ -59,4 +59,5 @@ class Client(Dispatcher, Loop):
     def start(self):
         Loop.start(self)
         Bus.add(self)
+        self.register("cmd", k.dispatch)
         

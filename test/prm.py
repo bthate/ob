@@ -1,6 +1,12 @@
 # This file is placed in the Public Domain.
 
+import random
+
+from ob.bus import Bus
+from ob.krn import k
 from ob.obj import Object
+
+events = []
 
 param = Object()
 param.add = ["test@shell", "bart", ""]
@@ -19,3 +25,27 @@ param.fnd = ["cfg",
 param.rss = ["https://www.reddit.com/r/python/.rss"]
 param.tdo = ["test4", ""]
 #param.mbx = ["~/Desktop/25-1-2013", ""]
+
+def consume():
+    fixed = []
+    res = []
+    for e in events:
+        e.wait()
+        fixed.append(e)
+    for f in fixed:
+        try:
+            events.remove(f)
+        except ValueError:
+            continue
+    return res
+
+def exec():
+    c = Bus.first()
+    print(str(type(c)))
+    l = list(k.modules)
+    random.shuffle(l)
+    for cmd in l:
+        for ex in getattr(param, cmd, [""]):
+            e = c.event(cmd + " " + ex)
+            k.dispatch(c, e)
+            events.append(e)

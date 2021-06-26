@@ -10,6 +10,7 @@ import sys
 import time
 
 from .bus import Bus
+from .clt import Client
 from .dft import Default
 from .dpt import Dispatcher
 from .int import find_cls, find_cmd, find_func

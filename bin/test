@@ -5,7 +5,6 @@ name = "ob"
 
 import os, sys ; sys.path.insert(0, os.getcwd())
 
-from ob.bus import Bus
 from ob.clt import Client
 from ob.krn import k, wrap
 
@@ -19,7 +18,7 @@ flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
 class Test(Client):
 
     def raw(self, txt):
-        if Kernel.opts("v"):
+        if k.opts("v"):
             cprint(txt)
 
 def cprint(*args):

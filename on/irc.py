@@ -85,7 +85,7 @@ class TextWrap(textwrap.TextWrapper):
 class IRC(Client):
 
     def __init__(self):
-        Output.__init__(self)
+        #Output.__init__(self)
         Client.__init__(self)
         self.buffer = []
         self.cfg = Cfg()
@@ -187,7 +187,7 @@ class IRC(Client):
     def fileno(self):
         return self.sock.fileno()
 
-    def handle(self, e):
+    def do(self, e):
         super().callbacks(e)
 
     def joinall(self):
@@ -286,11 +286,6 @@ class IRC(Client):
         self.sock.send(txt)
         self.state.last = time.time()
         self.state.nrsend += 1
-
-    def restart(self):
-        self.stop()
-        time.sleep(5.0)
-        self.start()
 
     def say(self, channel, txt):
         self.oput(channel, txt)
