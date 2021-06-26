@@ -41,11 +41,10 @@ def consume():
 
 def exec():
     c = Bus.first()
-    print(str(type(c)))
     l = list(k.modules)
     random.shuffle(l)
     for cmd in l:
         for ex in getattr(param, cmd, [""]):
             e = c.event(cmd + " " + ex)
-            k.dispatch(c, e)
+            k.dispatch(e)
             events.append(e)

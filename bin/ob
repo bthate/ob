@@ -5,7 +5,6 @@ import os, sys ; sys.path.insert(0, os.getcwd())
 
 from ob.clt import Client
 from ob.krn import k
-from ob.lop import Loop
 from ob.trm import wrap
 
 import os

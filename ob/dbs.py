@@ -5,6 +5,7 @@ from .krn import k
 from .obj import gettype
 
 import os
+import sys
 import time
 
 def __dir__():
@@ -142,9 +143,12 @@ def hook(hfn):
         oname = hfn.split(os.sep)
     cname = oname[0]
     fn = os.sep.join(oname)
-    t = k.classes.get(cname, None)
-    if not t:
-        raise NoType(cname)
+    mn, cn = cname.rsplit(".", 1)
+    mod = sys.modules.get(mn)
+    t = getattr(mod, cn, None)
+    #t = k.classes.get(cname, None)
+    #if not t:
+    #    raise NoType(cname)
     if fn:
         o = t()
         o.load(fn)

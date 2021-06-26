@@ -33,7 +33,7 @@ def main():
         shutil.rmtree(".test")
     k.error = error
     k.cfg.debug = True
-    k.cfg.p = "ob,om,on,oe"
+    k.cfg.p = "om,on,oe"
     k.boot(name, '.test')
     k.start()
     c = Test()

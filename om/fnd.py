@@ -3,6 +3,7 @@
 import time
 
 from ob.dbs import find, listfiles, fntime
+from ob.krn import k
 from ob.prs import elapsed
 from ob.obj import fmt
 

@@ -82,11 +82,11 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Client, Output):
+class IRC(Output, Client):
 
     def __init__(self):
-        Output.__init__(self)
         Client.__init__(self)
+        Output.__init__(self)
         self.buffer = []
         self.cfg = Cfg()
         self.connected = threading.Event()
