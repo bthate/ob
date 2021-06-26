@@ -32,7 +32,7 @@ class Client(Dispatcher, Loop):
         return c
 
     def handle(self, e):
-        raise NotImplemented
+        raise NotImplemented("handle")
 
     def loop(self):
         while not self.stopped.isSet():

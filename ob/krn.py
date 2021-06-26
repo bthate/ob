@@ -36,6 +36,7 @@ class Kernel(Table, Dispatcher, Loop):
         Dispatcher.__init__(self)
         Loop.__init__(self)
         self.cfg = Cfg()
+        self.register("cmd", self.dispatch)
 
     def boot(self, name, wd=None, version=__version__):
         self.parse_cli()
