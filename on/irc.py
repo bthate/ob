@@ -82,7 +82,7 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Output, Client):
+class IRC(Client, Output):
 
     def __init__(self):
         Output.__init__(self)
@@ -195,7 +195,7 @@ class IRC(Output, Client):
             self.command("JOIN", channel)
 
     def handle(self, e):
-        k.put(e)
+        self.dispatch(e)
 
     def keep(self):
         while not self.stopped.isSet():
@@ -385,7 +385,7 @@ class DCC(Client):
         return e
 
     def handle(self, e):
-        k.dispatch(self, e)
+        k.dispatch(e)
 
     def poll(self):
         return str(self.sock.recv(512), "utf8")
@@ -472,7 +472,7 @@ def PRIVMSG(clt, obj):
         if clt.cfg.users and not clt.users.allowed(obj.origin, "USER"):
             return
         obj.type = "cmd"
-        k.put(obj)
+        k.dispatch(obj)
 
 def QUIT(clt, obj):
     if obj.orig and obj.orig in clt.zelf:
