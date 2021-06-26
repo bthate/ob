@@ -1,10 +1,10 @@
 # This file is placed in the Public Domain.
 
 from .bus import Bus
-from .lop import Loop
 from .dpt import Dispatcher
+from .err import NotImplemented
 from .evt import Command
-from .krn import k
+from .lop import Loop
 
 def __dir__():
     return ('Client',) 
@@ -23,9 +23,6 @@ class Client(Dispatcher, Loop):
         self.dispatch(e)
         e.wait()
 
-    def do(self, e):
-        k.dispatch(e)
-
     def event(self, txt):
         if txt is None:
             return
@@ -35,7 +32,7 @@ class Client(Dispatcher, Loop):
         return c
 
     def handle(self, e):
-        k.put(e)
+        raise NotImplemented
 
     def loop(self):
         while not self.stopped.isSet():
@@ -59,5 +56,3 @@ class Client(Dispatcher, Loop):
     def start(self):
         Loop.start(self)
         Bus.add(self)
-        self.register("cmd", k.dispatch)
-        
