@@ -6,7 +6,7 @@ name = "ob"
 import os, sys ; sys.path.insert(0, os.getcwd())
 
 from ob.clt import Client
-from ob.krn import k, wrap
+from ob.krn import Kernel, wrap
 
 import doctest
 import readline
@@ -31,6 +31,7 @@ def error(hdl, obj):
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
+    k = Kernel()
     k.error = error
     k.cfg.debug = True
     k.cfg.p = "om,on,oe"

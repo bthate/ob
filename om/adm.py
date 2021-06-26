@@ -4,13 +4,14 @@ import threading
 import time
 
 from ob.bus import Bus
-from ob.krn import k
+from ob.krn import kernel
 from ob.prs import elapsed
 from ob.obj import Object, edit, fmt, getname
 
 def __dir__():
     return ("flt", "krn", "register", "thr", "upt", "ver")
 
+k = kernel()
 starttime = time.time()
 
 def flt(event):
@@ -23,6 +24,7 @@ def flt(event):
     event.reply(" | ".join([getname(o) for o in Bus.objs]))
 
 def krn(event):
+    k = kernel()
     if not event.args:
         event.reply(fmt(k.cfg, skip=["otxt", "opts", "sets", "old", "res"]))
         return
@@ -57,4 +59,5 @@ def upt(event):
     event.reply("uptime is %s" % elapsed(time.time() - starttime))
 
 def ver(event):
+    k = kernel()
     event.reply("%s %s" % (k.cfg.name.upper(), k.cfg.version))

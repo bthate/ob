@@ -3,15 +3,12 @@
 import time
 
 from ob.dbs import find, listfiles, fntime
-from ob.krn import k
+from ob.krn import kernel
 from ob.prs import elapsed
 from ob.obj import fmt
 
 def __dir__():
     return ("fnd",)
-
-def kernel():
-    return k
 
 def fnd(event):
     if not event.args:

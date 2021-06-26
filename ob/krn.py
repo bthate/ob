@@ -17,26 +17,29 @@ from .int import find_cls, find_cmd, find_func
 from .lop import Loop
 from .obj import Object, cdir, spl
 from .prs import parse_txt
-from .tbl import Table
 from .trm import wrap
 from .thr import launch
 from .ver import __version__
 
 def __dir__():
-    return ('Cfg', 'Kernel', 'k')
+    return ('Cfg', 'Kernel')
 
 class Cfg(Default):
 
     pass
 
-class Kernel(Table, Dispatcher, Loop):
+class Kernel(Dispatcher, Loop):
 
     def __init__(self):
-        Table.__init__(self)
         Dispatcher.__init__(self)
         Loop.__init__(self)
         self.cfg = Cfg()
+        self.cmds = Object()
         self.register("cmd", self.dispatch)
+
+    def add(self, func):
+        n = func.__name__
+        self.cmds[n] = func
 
     def boot(self, name, wd=None, version=__version__):
         self.parse_cli()
@@ -57,8 +60,6 @@ class Kernel(Table, Dispatcher, Loop):
             os.chown(self.cfg.wd, pwn.pw_uid, pwn.pw_gid)
         except PermissionError:
             pass
-        self.privileges()
-        self.scan(self.cfg.p)
         self.init(self.cfg.m)
 
     def cmd(self, clt, txt):
@@ -76,7 +77,7 @@ class Kernel(Table, Dispatcher, Loop):
 
     def handle(self, hdl, obj):
         obj.parse()
-        f = self.getcmd(obj.cmd)
+        f = self.cmds.get(obj.cmd, None)
         if f:
             f(obj)
             obj.show()
@@ -84,9 +85,8 @@ class Kernel(Table, Dispatcher, Loop):
 
     def init(self, mns):
         for mn in spl(mns):
-            mnn = self.getfull(mn)
-            mod = self.getmod(mnn)
-            if "init" in dir(mod):
+            mod = sys.modules.get(mn, None)
+            if mod and "init" in dir(mod):
                 launch(mod.init, self)
 
     def opts(self, ops):
@@ -126,8 +126,20 @@ class Kernel(Table, Dispatcher, Loop):
             return False
         return True
 
+    def scan(self, pkgs=""):
+        res = {}
+        for pn in spl(pkgs):
+            p = sys.modules.get(pn, None)
+            if not p:
+                continue
+            for mn in pkgutil.walk_packages(p.__path__, pn+"."):
+                zip = mn[0].find_module(mn[1])
+                mod = zip.load_module(mn[1])
+                self.introspect(mod)
+                
     def start(self):
         super().start()
+        self.parse_cli()
         self.register("cmd", self.handle)
 
     @staticmethod
@@ -135,4 +147,5 @@ class Kernel(Table, Dispatcher, Loop):
         while 1:
             time.sleep(5.0)
 
-k = Kernel()
+def kernel():
+    return getattr(sys.modules["__main__"], "k", None)

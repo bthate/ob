@@ -3,7 +3,6 @@
 import queue
 import threading
 
-from .err import NotImplemented, Restart, Stop
 from .evt import Event
 from .obj import Object
 from .thr import launch
@@ -11,6 +10,18 @@ from .trc import get_exception
 
 def __dir__():
     return ('Loop',)
+
+class NotImplemented(Exception):
+
+    pass
+
+class Restart(Exception):
+
+    pass
+
+class Stop(Exception):
+
+    pass
 
 class Loop(Object):
 

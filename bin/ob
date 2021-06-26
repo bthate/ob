@@ -4,7 +4,7 @@
 import os, sys ; sys.path.insert(0, os.getcwd())
 
 from ob.clt import Client
-from ob.krn import k
+from ob.krn import Kernel, kernel
 from ob.trm import wrap
 
 import os
@@ -30,7 +30,7 @@ class CLI(Client):
 class Console(CLI):
 
     def handle(self, e):
-        k.put(e)
+        self.dispatch(e)
         e.wait()
 
     def poll(self):
@@ -40,16 +40,16 @@ def error(e):
     cprint(e.exc)
     
 def main():
-    k.error = error
-    k.cfg.p = "om"
-    k.boot(name, wd)
+    k = Kernel()
     k.start()
     wait = k.opts("c") or k.cfg.m
     if k.cfg.txt and not wait:
         c = CLI()
+        c.scan("om,on")
         return k.cmd(c, k.cfg.otxt)
     if wait:
         c = Console()
+        c.scan("om,on")
         c.start()
         k.wait()
 

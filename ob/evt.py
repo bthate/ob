@@ -4,12 +4,15 @@ import threading
 
 from .bus import Bus
 from .dft import Default
-from .err import NoBot
 from .opt import Output
 from .prs import parse_txt
 
 def __dir__():
    return ('Command', 'Event')
+
+class NoBot(Exception):
+
+    pass
 
 class Event(Default):
 

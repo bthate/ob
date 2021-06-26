@@ -23,6 +23,18 @@ def gettype(o):
 def spl(txt):
     return [x for x in txt.split(",") if x]
 
+class NoFile(Exception):
+
+    pass
+
+class NoModule(Exception):
+
+    pass
+
+class NoType(Exception):
+
+    pass
+
 class O:
 
     __slots__ = ("__dict__", "__stp__", "__otype__")
@@ -69,7 +81,7 @@ class O:
         self.__dict__[k] = v
 
     def __repr__(self):
-        return js.dumps(self.__dict__, default=self.__default__, sort_keys=True)
+        return '%s' % str(self)
 
     def __str__(self):
         return str(self.__dict__)
@@ -145,7 +157,7 @@ class Object(Obj):
         from .krn import k
         assert k.cfg.wd
         if opath.count(os.sep) != 3:
-            raise NoFilenameError(opath)
+            raise NoFile(opath)
         spl = opath.split(os.sep)
         stp = os.sep.join(spl[-4:])
         lpath = os.path.join(k.cfg.wd, "store", stp)
@@ -208,6 +220,27 @@ def fmt(o, keys=None, empty=True, skip=None):
     txt += " ".join([x.strip() for x in result])
     return txt.strip()
 
+def fns(wd, name, timed=None):
+    if not name:
+        return []
+    p = os.path.join(wd, "store", name) + os.sep
+    res = []
+    d = ""
+    for rootdir, dirs, _files in os.walk(p, topdown=False):
+        if dirs:
+            d = sorted(dirs)[-1]
+            if d.count("-") == 2:
+                dd = os.path.join(rootdir, d)
+                fls = sorted(os.listdir(dd))
+                if fls:
+                    p = os.path.join(dd, fls[-1])
+                    if timed and "from" in timed and timed["from"] and fntime(p) < timed["from"]:
+                        continue
+                    if timed and timed.to and fntime(p) > timed.to:
+                        continue
+                    res.append(p)
+    return sorted(res, key=fntime)
+
 def getname(o):
     t = type(o)
     if t == types.ModuleType:
@@ -220,3 +253,21 @@ def getname(o):
         return o.__class__.__name__
     if "__name__" in dir(o):
         return o.__name__
+
+def hook(hfn):
+    if hfn.count(os.sep) > 3:
+        oname = hfn.split(os.sep)[-4:]
+    else:
+        oname = hfn.split(os.sep)
+    cname = oname[0]
+    fn = os.sep.join(oname)
+    mn, cn = cname.rsplit(".", 1)
+    mod = sys.modules.get(mn, None)
+    if mod:
+        raise NoModule(mn)        
+    t = getattr(mod, cn, None)
+    if fn:
+        o = t()
+        o.load(fn)
+        return o
+    raise NoType(cname)

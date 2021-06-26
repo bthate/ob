@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 from .err import NoType
-from .krn import k
+from .krn import kernel
 from .obj import gettype
 
 import os
@@ -15,29 +15,26 @@ def all(otype, selector=None, index=None, timed=None):
     nr = -1
     if selector is None:
         selector = {}
-    otypes = k.getnames(otype, [])
-    for t in otypes:
-        for fn in fns(t, timed):
-            o = hook(fn)
-            if selector and not o.search(selector):
-                continue
-            if "_deleted" in o and o._deleted:
-                continue
-            nr += 1
-            if index is not None and nr != index:
-                continue
-            yield fn, o
+    for fn in fns(otype, timed):
+        o = hook(fn)
+        if selector and not o.search(selector):
+            continue
+        if "_deleted" in o and o._deleted:
+            continue
+        nr += 1
+        if index is not None and nr != index:
+            continue
+        yield fn, o
 
 def deleted(otype):
-    otypes = k.getnames(otype, [])
-    for t in otypes:
-        for fn in fns(t):
-            o = hook(fn)
-            if "_deleted" not in o or not o._deleted:
-                continue
-            yield fn, o
+    for fn in fns(otype):
+        o = hook(fn)
+        if "_deleted" not in o or not o._deleted:
+            continue
+        yield fn, o
 
 def every(selector=None, index=None, timed=None):
+    k = kernel()
     if selector is None:
         selector = {}
     nr = -1
@@ -53,23 +50,22 @@ def every(selector=None, index=None, timed=None):
                 continue
             yield fn, o
 
-def find(otypes, selector=None, index=None, timed=None):
+def find(otype, selector=None, index=None, timed=None):
     if selector is None:
         selector = {}
     got = False
     nr = -1
-    for t in otypes:
-        for fn in fns(t, timed):
-            o = hook(fn)
-            if selector and not o.search(selector):
-                continue
-            if "_deleted" in o and o._deleted:
-                continue
-            nr += 1
-            if index is not None and nr != index:
-                continue
-            got = True
-            yield (fn, o)
+    for fn in fns(otype, timed):
+        o = hook(fn)
+        if selector and not o.search(selector):
+            continue
+        if "_deleted" in o and o._deleted:
+            continue
+        nr += 1
+        if index is not None and nr != index:
+            continue
+        got = True
+        yield (fn, o)
     if not got:
         return (None, None)
 
@@ -104,6 +100,7 @@ def lastfn(otype):
 def fns(name, timed=None):
     if not name:
         return []
+    k = kernel()
     p = os.path.join(k.cfg.wd, "store", name) + os.sep
     res = []
     d = ""
@@ -146,9 +143,6 @@ def hook(hfn):
     mn, cn = cname.rsplit(".", 1)
     mod = sys.modules.get(mn)
     t = getattr(mod, cn, None)
-    #t = k.classes.get(cname, None)
-    #if not t:
-    #    raise NoType(cname)
     if fn:
         o = t()
         o.load(fn)

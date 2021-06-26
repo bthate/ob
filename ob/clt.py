@@ -2,12 +2,15 @@
 
 from .bus import Bus
 from .dpt import Dispatcher
-from .err import NotImplemented
 from .evt import Command
 from .lop import Loop
 
 def __dir__():
     return ('Client',) 
+
+class NotImplemented(Exception):
+
+    pass
 
 class Client(Dispatcher, Loop):
 
