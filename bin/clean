@@ -1,3 +1,3 @@
 # This file is placed in the Public Domain.
 
-rm -fR od/*~ od/__pycache__ ob.egg-info files/*~ env env.tar.gz MANIFEST *~  bin/*~ build dist om/*~ om/__pycache__ ob.egg-info om/*~ om/__pycache__ oe/*~ oe/__pycache__ on/*~ on/__pycache__ ob/*~ ob/__pycache__ test/*~ test/__pycache__ .test
+rm -fR __pycache__ od/*~ od/__pycache__ ob.egg-info files/*~ env env.tar.gz MANIFEST *~  bin/*~ build dist om/*~ om/__pycache__ ob.egg-info om/*~ om/__pycache__ oe/*~ oe/__pycache__ on/*~ on/__pycache__ ob/*~ ob/__pycache__ test/*~ test/__pycache__ .test

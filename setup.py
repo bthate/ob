@@ -14,6 +14,7 @@ setup(
     url='https://github.com/bthate/ob',
     long_description=read(),
     license='Public Domain',
+    package_dir={'': 'lib'},
     py_modules=["ob"],
     zip_safe=True,
     classifiers=['Development Status :: 3 - Alpha',

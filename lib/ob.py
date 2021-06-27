@@ -10,7 +10,7 @@ import types
 import uuid
 
 def __dir__():
-    return ('Default', 'List', 'O', 'Obj', 'Object', 'cdir', 'edit', 'fmt', 'gettype', 'spl', 'all', 'deleted', 'every', 'find', 'last', 'lasttype', 'lastfn', 'fntime', 'hook')
+    return ('Db', 'Default', 'List', 'O', 'Obj', 'Object', 'cdir', 'fmt', 'gettype', 'spl')
 
 wd = ""
 
@@ -101,6 +101,22 @@ class Obj(O):
         for k in keys:
             del self[k]
 
+    def edit(self, setter, skip=True, skiplist=[]):
+        count = 0
+        for key, v in setter.items():
+            if skip and v == "":
+                continue
+            if key in skiplist:
+                continue
+            count += 1
+            if v in ["True", "true"]:
+                self[key] = True
+            elif v in ["False", "false"]:
+                self[key] = False
+            else:
+                self[key] = v
+        return count
+
     def get(self, key, default=None):
         return self.__dict__.get(key, default)
 
@@ -109,6 +125,17 @@ class Obj(O):
 
     def items(self):
         return self.__dict__.items()
+
+    def last(self):
+        db = Db()
+        t = str(gettype(self))
+        path, l = db.lastfn(t)
+        if  l:
+            self.update(l)
+        if path:
+            spl = path.split(os.sep)
+            stp = os.sep.join(spl[-4:])
+            return stp
 
     def merge(self, d):
         for k, v in d.items():
@@ -209,21 +236,83 @@ class List(Object):
         for k, v in d.items():
             self.append(k, v)
 
-def edit(o, setter, skip=True, skiplist=[]):
-    count = 0
-    for key, v in setter.items():
-        if skip and v == "":
-            continue
-        if key in skiplist:
-            continue
-        count += 1
-        if v in ["True", "true"]:
-            o[key] = True
-        elif v in ["False", "false"]:
-            o[key] = False
-        else:
-            o[key] = v
-    return count
+class Db(Object):
+
+    def all(self, otype, selector=None, index=None, timed=None):
+        nr = -1
+        if selector is None:
+            selector = {}
+        for fn in fns(otype, timed):
+            o = hook(fn)
+            if selector and not o.search(selector):
+                continue
+            if "_deleted" in o and o._deleted:
+                continue
+            nr += 1
+            if index is not None and nr != index:
+                continue
+            yield fn, o
+
+    def deleted(self, otype):
+        for fn in fns(otype):
+            o = hook(fn)
+            if "_deleted" not in o or not o._deleted:
+                continue
+            yield fn, o
+
+    def every(self, selector=None, index=None, timed=None):
+        k = kernel()
+        if selector is None:
+            selector = {}
+        nr = -1
+        for otype in os.listdir(os.path.join(wd, "store")):
+            for fn in fns(otype, timed):
+                o = hook(fn)
+                if selector and not o.search(selector):
+                    continue
+                if "_deleted" in o and o._deleted:
+                    continue
+                nr += 1
+                if index is not None and nr != index:
+                    continue
+                yield fn, o
+
+    def find(self, otype, selector=None, index=None, timed=None):
+        if selector is None:
+            selector = {}
+        got = False
+        nr = -1
+        for fn in fns(otype, timed):
+            o = hook(fn)
+            if selector and not o.search(selector):
+                continue
+            if "_deleted" in o and o._deleted:
+                continue
+            nr += 1
+            if index is not None and nr != index:
+                continue
+            got = True
+            yield (fn, o)
+        if not got:
+            return (None, None)
+
+    def lastmatch(self, otype, selector=None, index=None, timed=None):
+        res = sorted(find(otype, selector, index, timed), key=lambda x: fntime(x[0]))
+        if res:
+            return res[-1]
+        return (None, None)
+
+    def lasttype(self, otype):
+        fnn = fns(otype)
+        if fnn:
+            return hook(fnn[-1])
+
+    def lastfn(self, otype):
+        fn = fns(otype)
+        if fn:
+            fnn = fn[-1]
+            return (fnn, hook(fnn))
+        return (None, None)
 
 def fmt(o, keys=None, empty=True, skip=None):
     if keys is None:
@@ -270,110 +359,6 @@ def fns(name, timed=None):
                     res.append(p)
     return sorted(res, key=fntime)
 
-def hook(hfn):
-    if hfn.count(os.sep) > 3:
-        oname = hfn.split(os.sep)[-4:]
-    else:
-        oname = hfn.split(os.sep)
-    cname = oname[0]
-    fn = os.sep.join(oname)
-    mn, cn = cname.rsplit(".", 1)
-    mod = sys.modules.get(mn, None)
-    if mod:
-        raise NoModule(mn)        
-    t = getattr(mod, cn, None)
-    if fn:
-        o = t()
-        o.load(fn)
-        return o
-    raise NoType(cname)
-
-def all(otype, selector=None, index=None, timed=None):
-    nr = -1
-    if selector is None:
-        selector = {}
-    for fn in fns(otype, timed):
-        o = hook(fn)
-        if selector and not o.search(selector):
-            continue
-        if "_deleted" in o and o._deleted:
-            continue
-        nr += 1
-        if index is not None and nr != index:
-            continue
-        yield fn, o
-
-def deleted(otype):
-    for fn in fns(otype):
-        o = hook(fn)
-        if "_deleted" not in o or not o._deleted:
-            continue
-        yield fn, o
-
-def every(selector=None, index=None, timed=None):
-    k = kernel()
-    if selector is None:
-        selector = {}
-    nr = -1
-    for otype in os.listdir(os.path.join(wd, "store")):
-        for fn in fns(otype, timed):
-            o = hook(fn)
-            if selector and not o.search(selector):
-                continue
-            if "_deleted" in o and o._deleted:
-                continue
-            nr += 1
-            if index is not None and nr != index:
-                continue
-            yield fn, o
-
-def find(otype, selector=None, index=None, timed=None):
-    if selector is None:
-        selector = {}
-    got = False
-    nr = -1
-    for fn in fns(otype, timed):
-        o = hook(fn)
-        if selector and not o.search(selector):
-            continue
-        if "_deleted" in o and o._deleted:
-            continue
-        nr += 1
-        if index is not None and nr != index:
-            continue
-        got = True
-        yield (fn, o)
-    if not got:
-        return (None, None)
-
-def last(o):
-    t = str(gettype(o))
-    path, l = lastfn(t)
-    if  l:
-        o.update(l)
-    if path:
-        spl = path.split(os.sep)
-        stp = os.sep.join(spl[-4:])
-        return stp
-
-def lastmatch(otype, selector=None, index=None, timed=None):
-    res = sorted(find(otype, selector, index, timed), key=lambda x: fntime(x[0]))
-    if res:
-        return res[-1]
-    return (None, None)
-
-def lasttype(otype):
-    fnn = fns(otype)
-    if fnn:
-        return hook(fnn[-1])
-
-def lastfn(otype):
-    fn = fns(otype)
-    if fn:
-        fnn = fn[-1]
-        return (fnn, hook(fnn))
-    return (None, None)
-
 def fntime(daystr):
     daystr = daystr.replace("_", ":")
     datestr = " ".join(daystr.split(os.sep)[-2:])
@@ -396,7 +381,9 @@ def hook(hfn):
     cname = oname[0]
     fn = os.sep.join(oname)
     mn, cn = cname.rsplit(".", 1)
-    mod = sys.modules.get(mn)
+    mod = sys.modules.get(mn, None)
+    if not mod:
+        raise NoModule(mn)        
     t = getattr(mod, cn, None)
     if fn:
         o = t()
@@ -409,4 +396,3 @@ def listfiles(wd):
     if not os.path.exists(path):
         return []
     return sorted(os.listdir(path))
-

@@ -3,7 +3,7 @@
 import os
 import unittest
 
-from ob import O, Object, find, gettype, last
+from ob import Db, O, Object, gettype
 
 class Test_Object(unittest.TestCase):
 
@@ -36,10 +36,10 @@ class Test_Object(unittest.TestCase):
         self.assertTrue(not o)
 
     def test_final(self):
-        o = Object()
-        o.last = "bla"
-        last(o)
-        self.assertEqual(o.last, "bla")
+        with self.assertRaises(TypeError):
+            o = Object()
+            o.last = "bla"
+            o.last()
 
     def test_stamp(self):
         o = Object()
@@ -79,20 +79,20 @@ class Test_Object(unittest.TestCase):
         o.bla = "test"
         o.save()
         oo = Object()
-        last(oo)
+        oo.last()
         self.assertEqual(oo.bla, "test")
 
     def test_last2(self):
         o = Object()
         o.save()
         uuid1 = o.__stp__.split(os.sep)[1]
-        last(o)
+        o.last()
         uuid2 = o.__stp__.split(os.sep)[1]
         self.assertEqual(uuid1, uuid2)
 
     def test_last3(self):
         o = Object()
-        last(o)
+        o.last()
         s = o.__stp__
         uuid1 = o.__stp__.split(os.sep)[1]
         o.save()
@@ -104,11 +104,11 @@ class Test_Object(unittest.TestCase):
         o.bla = "test"
         o.save()
         oo = Object()
-        p = last(oo)
+        p = oo.last()
         oo.bla = "mekker"
         oo.save()
         ooo = Object()
-        p = last(ooo)
+        p = ooo.last()
         self.assertEqual(ooo.bla, "mekker")
 
     def test_merge(self):
