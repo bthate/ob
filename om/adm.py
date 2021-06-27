@@ -3,10 +3,11 @@
 import threading
 import time
 
-from ob.bus import Bus
-from ob.krn import kernel
-from ob.prs import elapsed
-from ob.obj import Object, edit, fmt, getname
+from krn.run import kernel
+from krn.hdl import Bus
+from krn.prs import elapsed
+from krn.obj import Object, edit, fmt
+from krn.thr import getname
 
 def __dir__():
     return ("flt", "krn", "register", "thr", "upt", "ver")
@@ -58,6 +59,3 @@ def thr(event):
 def upt(event):
     event.reply("uptime is %s" % elapsed(time.time() - starttime))
 
-def ver(event):
-    k = kernel()
-    event.reply("%s %s" % (k.cfg.name.upper(), k.cfg.version))

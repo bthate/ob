@@ -4,9 +4,6 @@ import queue
 import threading
 import types
 
-def __dir__():
-    return ('Thr', 'getname', 'launch')
-
 class Thr(threading.Thread):
 
     def __init__(self, func, *args, thrname="", daemon=True):

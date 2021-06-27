@@ -2,10 +2,9 @@
 
 import time
 
-from ob.dbs import find, listfiles, fntime
-from ob.krn import kernel
-from ob.prs import elapsed
-from ob.obj import fmt
+from krn.run import kernel
+from krn.obj import fmt, find, listfiles, fntime
+from krn.prs import elapsed
 
 def __dir__():
     return ("fnd",)
@@ -25,8 +24,7 @@ def fnd(event):
         pass
     got = False
     k = kernel()
-    otypes = k.getnames(otype, [otype,])
-    for fn, o in find(otypes, event.gets, event.index, event.timed):
+    for fn, o in find(otype, event.gets, event.index, event.timed):
         nr += 1
         txt = "%s %s" % (str(nr), fmt(o, args or o.keys(), skip=event.skip.keys()))
         if "t" in event.opts:

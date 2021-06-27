@@ -3,11 +3,9 @@
 import socket
 import time
 
-from ob.bus import Bus
-from ob.dbs import last
-from ob.dft import Default
-from ob.obj import Object
-from ob.thr import launch
+from krn.hdl import Bus
+from krn.obj import Default, Object, last
+from krn.thr import launch
 
 def __dir__():
     return ("Cfg", "UDP", "init", "toudp")

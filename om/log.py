@@ -1,6 +1,6 @@
 # This file is in the Public Domain.
 
-from ob.obj import Object
+from krn.obj import Object
 
 def __dir__():
     return ("Log", "log")

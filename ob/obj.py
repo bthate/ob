@@ -4,11 +4,15 @@ import datetime
 import json as js
 import os
 import pathlib
+import sys
+import time
 import types
 import uuid
 
 def __dir__():
-    return ('O', 'Obj', 'Object', 'cdir', 'edit', 'fmt', 'getname', 'gettype', 'spl')
+    return ('Default', 'List', 'O', 'Obj', 'Object', 'cdir', 'edit', 'fmt', 'gettype', 'spl', 'all', 'deleted', 'every', 'find', 'last', 'lasttype', 'lastfn', 'fntime', 'hook')
+
+wd = ""
 
 def cdir(path):
     if os.path.exists(path):
@@ -81,7 +85,7 @@ class O:
         self.__dict__[k] = v
 
     def __repr__(self):
-        return '%s' % str(self)
+        return js.dumps(self, default=self.__default__)
 
     def __str__(self):
         return str(self.__dict__)
@@ -154,13 +158,12 @@ class Object(Obj):
         return repr(self)
 
     def load(self, opath):
-        from .krn import k
-        assert k.cfg.wd
+        assert wd
         if opath.count(os.sep) != 3:
             raise NoFile(opath)
         spl = opath.split(os.sep)
         stp = os.sep.join(spl[-4:])
-        lpath = os.path.join(k.cfg.wd, "store", stp)
+        lpath = os.path.join(wd, "store", stp)
         if os.path.exists(lpath):
             with open(lpath, "r") as ofile:
                 d = js.load(ofile, object_hook=Obj)
@@ -169,16 +172,42 @@ class Object(Obj):
         return self
 
     def save(self, tab=False):
-        from .krn import k
-        assert k.cfg.wd
+        assert wd
         prv = os.sep.join(self.__stp__.split(os.sep)[:2])
         self.__stp__ = os.path.join(prv, os.sep.join(str(datetime.datetime.now()).split()))
-        opath = os.path.join(k.cfg.wd, "store", self.__stp__)
+        opath = os.path.join(wd, "store", self.__stp__)
         cdir(opath)
         with open(opath, "w") as ofile:
             js.dump(self, ofile, default=self.__default__, indent=4, sort_keys=True)
         os.chmod(opath, 0o444)
         return self.__stp__
+
+class Default(Object):
+
+    default = ""
+
+    def __getattr__(self, k):
+        if k in self:
+            return super().__getattribute__(k)
+        if k in super().__dict__:
+            return super().__getitem__(k)
+        return self.default
+
+class List(Object):
+
+    def append(self, key, value):
+        if key not in self:
+            self[key] = []
+        if value in self[key]:
+            return
+        if isinstance(value, list):
+            self[key].extend(value)
+        else:
+            self[key].append(value)
+
+    def update(self, d):
+        for k, v in d.items():
+            self.append(k, v)
 
 def edit(o, setter, skip=True, skiplist=[]):
     count = 0
@@ -220,7 +249,7 @@ def fmt(o, keys=None, empty=True, skip=None):
     txt += " ".join([x.strip() for x in result])
     return txt.strip()
 
-def fns(wd, name, timed=None):
+def fns(name, timed=None):
     if not name:
         return []
     p = os.path.join(wd, "store", name) + os.sep
@@ -241,19 +270,6 @@ def fns(wd, name, timed=None):
                     res.append(p)
     return sorted(res, key=fntime)
 
-def getname(o):
-    t = type(o)
-    if t == types.ModuleType:
-        return o.__name__
-    if "__self__" in dir(o):
-        return "%s.%s" % (o.__self__.__class__.__name__, o.__name__)
-    if "__class__" in dir(o) and "__name__" in dir(o):
-        return "%s.%s" % (o.__class__.__name__, o.__name__)
-    if "__class__" in dir(o):
-        return o.__class__.__name__
-    if "__name__" in dir(o):
-        return o.__name__
-
 def hook(hfn):
     if hfn.count(os.sep) > 3:
         oname = hfn.split(os.sep)[-4:]
@@ -271,3 +287,126 @@ def hook(hfn):
         o.load(fn)
         return o
     raise NoType(cname)
+
+def all(otype, selector=None, index=None, timed=None):
+    nr = -1
+    if selector is None:
+        selector = {}
+    for fn in fns(otype, timed):
+        o = hook(fn)
+        if selector and not o.search(selector):
+            continue
+        if "_deleted" in o and o._deleted:
+            continue
+        nr += 1
+        if index is not None and nr != index:
+            continue
+        yield fn, o
+
+def deleted(otype):
+    for fn in fns(otype):
+        o = hook(fn)
+        if "_deleted" not in o or not o._deleted:
+            continue
+        yield fn, o
+
+def every(selector=None, index=None, timed=None):
+    k = kernel()
+    if selector is None:
+        selector = {}
+    nr = -1
+    for otype in os.listdir(os.path.join(wd, "store")):
+        for fn in fns(otype, timed):
+            o = hook(fn)
+            if selector and not o.search(selector):
+                continue
+            if "_deleted" in o and o._deleted:
+                continue
+            nr += 1
+            if index is not None and nr != index:
+                continue
+            yield fn, o
+
+def find(otype, selector=None, index=None, timed=None):
+    if selector is None:
+        selector = {}
+    got = False
+    nr = -1
+    for fn in fns(otype, timed):
+        o = hook(fn)
+        if selector and not o.search(selector):
+            continue
+        if "_deleted" in o and o._deleted:
+            continue
+        nr += 1
+        if index is not None and nr != index:
+            continue
+        got = True
+        yield (fn, o)
+    if not got:
+        return (None, None)
+
+def last(o):
+    t = str(gettype(o))
+    path, l = lastfn(t)
+    if  l:
+        o.update(l)
+    if path:
+        spl = path.split(os.sep)
+        stp = os.sep.join(spl[-4:])
+        return stp
+
+def lastmatch(otype, selector=None, index=None, timed=None):
+    res = sorted(find(otype, selector, index, timed), key=lambda x: fntime(x[0]))
+    if res:
+        return res[-1]
+    return (None, None)
+
+def lasttype(otype):
+    fnn = fns(otype)
+    if fnn:
+        return hook(fnn[-1])
+
+def lastfn(otype):
+    fn = fns(otype)
+    if fn:
+        fnn = fn[-1]
+        return (fnn, hook(fnn))
+    return (None, None)
+
+def fntime(daystr):
+    daystr = daystr.replace("_", ":")
+    datestr = " ".join(daystr.split(os.sep)[-2:])
+    if "." in datestr:
+        datestr, rest = datestr.rsplit(".", 1)
+    else:
+        rest = ""
+    t = time.mktime(time.strptime(datestr, "%Y-%m-%d %H:%M:%S"))
+    if rest:
+        t += float("." + rest)
+    else:
+        t = 0
+    return t
+
+def hook(hfn):
+    if hfn.count(os.sep) > 3:
+        oname = hfn.split(os.sep)[-4:]
+    else:
+        oname = hfn.split(os.sep)
+    cname = oname[0]
+    fn = os.sep.join(oname)
+    mn, cn = cname.rsplit(".", 1)
+    mod = sys.modules.get(mn)
+    t = getattr(mod, cn, None)
+    if fn:
+        o = t()
+        o.load(fn)
+        return o
+    raise NoType(cname)
+
+def listfiles(wd):
+    path = os.path.join(wd, "store")
+    if not os.path.exists(path):
+        return []
+    return sorted(os.listdir(path))
+

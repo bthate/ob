@@ -1,7 +1,6 @@
 # This file is in the Public Domain.
 
-from ob.dbs import find
-from ob.obj import Object
+from krn.obj import Object, find
 
 def __dir__():
     return ("Todo", "dne", "tdo")

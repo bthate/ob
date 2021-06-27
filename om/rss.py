@@ -4,13 +4,10 @@ import re
 import threading
 import urllib
 
-from ob.bus import Bus
-from ob.clk import Repeater
-from ob.dbs import all, find, last, lastmatch
-from ob.dft import Default
-from ob.krn import k
-from ob.thr import launch
-from ob.obj import Object, edit
+from krn.hdl import Bus
+from krn.obj import Default, Object, all, edit, find, last, lastmatch
+from krn.run import Repeater, kernel
+from krn.thr import launch
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode

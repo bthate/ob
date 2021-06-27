@@ -8,16 +8,10 @@ import time
 import threading
 import _thread
 
-from ob.bus import Bus
-from ob.clt import Client
-from ob.dbs import find, last
-from ob.dft import Default
-from ob.dpt import Dispatcher
-from ob.evt import Event
-from ob.krn import k
-from ob.opt import Output
-from ob.thr import launch
-from ob.obj import Object, edit, fmt
+from krn.hdl import Bus, Dispatcher, Event, Handler, Output
+from krn.obj import Default, Object, edit, find, fmt, last
+from krn.run import kernel
+from krn.thr import launch
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre")
@@ -26,6 +20,8 @@ def init(k):
     i = IRC()
     launch(i.start)
     return i
+
+k = kernel()
 
 def locked(l):
     def lockeddec(func, *args, **kwargs):
@@ -46,12 +42,12 @@ saylock = _thread.allocate_lock()
 class Cfg(Default):
 
     cc = "!"
-    channel = "#ob"
-    nick = "ob"
+    channel = "#krn"
+    nick = "krn"
     port = 6667
     server = "localhost"
-    realname = "python3 object library"
-    username = "ob"
+    realname = "python3 runtime library"
+    username = "krn"
     users = False
 
     def __init__(self, val=None):
@@ -82,10 +78,10 @@ class TextWrap(textwrap.TextWrapper):
         self.tabsize = 4
         self.width = 450
 
-class IRC(Output, Client):
+class IRC(Output, Handler):
 
     def __init__(self):
-        Client.__init__(self)
+        Handler.__init__(self)
         Output.__init__(self)
         self.buffer = []
         self.cfg = Cfg()
@@ -317,7 +313,7 @@ class IRC(Output, Client):
                        self.cfg.nick,
                        int(self.cfg.port))
         self.connected.wait()
-        Client.start(self)
+        Handler.start(self)
         Output.start(self)
         Bus.add(self)
         if not self.keeprunning:
@@ -330,13 +326,13 @@ class IRC(Output, Client):
             self.sock.shutdown(2)
         except OSError:
             pass
-        Client.stop(self)
+        Handler.stop(self)
         Output.stop(self)
 
     def wait(self):
         self.joined.wait()
 
-class DCC(Client):
+class DCC(Handler):
 
     def __init__(self):
         super().__init__()
