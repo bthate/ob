@@ -1,6 +1,6 @@
 # This file is in the Public Domain.
 
-from krn.obj import Object, find
+from ob.obj import Object, find
 
 def __dir__():
     return ("Todo", "dne", "tdo")
@@ -15,7 +15,7 @@ def dne(clt, event):
     if not event.args:
         event.reply("dne txt==<string>")
         return
-    for fn, o in find("todo", event.gets):
+    for fn, o in find("om.tdo.Todo", event.gets):
         o._deleted = True
         o.save()
         event.reply("ok")

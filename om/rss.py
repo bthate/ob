@@ -4,10 +4,10 @@ import re
 import threading
 import urllib
 
-from krn.hdl import Bus
-from krn.obj import Default, Object, all, edit, find, last, lastmatch
-from krn.run import Repeater, kernel
-from krn.thr import launch
+from ob.hdl import Bus
+from ob.obj import Default, Object, all, edit, find, last, lastmatch
+from ob.run import Repeater, kernel
+from ob.thr import launch
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
@@ -20,6 +20,8 @@ def init(k):
     f = Fetcher()
     launch(f.start)
     return f
+
+k = kernel()
 
 class Cfg(Default):
 
@@ -104,7 +106,7 @@ class Fetcher(Object):
 
     def run(self):
         thrs = []
-        for fn, o in all("rss"):
+        for fn, o in all("om.rss.Rss"):
             thrs.append(launch(self.fetch, o))
         return thrs
 
@@ -179,7 +181,7 @@ def dpl(event):
         event.reply("dpl <stringinurl> <item1,item2>")
         return
     setter = {"display_list": event.args[1]}
-    fn, o = lastmatch("rss", {"rss": event.args[0]})
+    fn, o = lastmatch("om.rss.Rss", {"rss": event.args[0]})
     if o:
         edit(o, setter)
         o.save()
@@ -205,7 +207,7 @@ def rem(event):
     selector = {"rss": event.args[0]}
     nr = 0
     got = []
-    for fn, o in find("rss", selector):
+    for fn, o in find("om.rss.Rss", selector):
         nr += 1
         o._deleted = True
         got.append(o)
@@ -218,7 +220,7 @@ def rss(event):
         event.reply("rss <url>")
         return
     url = event.args[0]
-    res = list(find("rss", {"rss": url}))
+    res = list(find("om/.rss.Rss", {"rss": url}))
     if res:
         return
     o = Rss()

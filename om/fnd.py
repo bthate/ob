@@ -2,9 +2,9 @@
 
 import time
 
-from krn.run import kernel
-from krn.obj import fmt, find, listfiles, fntime
-from krn.prs import elapsed
+from ob.run import kernel
+from ob.obj import fmt, find, listfiles, fntime
+from ob.prs import elapsed
 
 def __dir__():
     return ("fnd",)

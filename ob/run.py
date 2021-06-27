@@ -20,7 +20,7 @@ from .obj import Default, Object, cdir, spl
 from .prs import parse_txt
 from .thr import launch, getname
 
-import krn.obj
+import ob.obj
 
 def __dir__():
     return ('Cfg', 'Kernel', 'Repeater', 'Timer', 'launch', 'wrap')
@@ -101,7 +101,7 @@ class Kernel(Dispatcher, Loop):
         self.cfg.update(self.cfg.sets)
         if not self.cfg.wd:
             self.cfg.wd = os.path.expanduser("~/.krn")
-        krn.obj.wd = self.cfg.wd
+        ob.obj.wd = self.cfg.wd
 
     @staticmethod
     def privileges(name=None):
@@ -125,7 +125,7 @@ class Kernel(Dispatcher, Loop):
         except KeyError:
             return False
         try:
-            os.chown(krn.obj.wd, pwn.pw_uid, pwn.pw_gid)
+            os.chown(ob.obj.wd, pwn.pw_uid, pwn.pw_gid)
         except PermissionError:
             pass
         os.setgroups([])

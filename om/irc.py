@@ -8,10 +8,10 @@ import time
 import threading
 import _thread
 
-from krn.hdl import Bus, Dispatcher, Event, Handler, Output
-from krn.obj import Default, Object, edit, find, fmt, last
-from krn.run import kernel
-from krn.thr import launch
+from ob.hdl import Bus, Dispatcher, Event, Handler, Output
+from ob.obj import Default, Object, edit, find, fmt, last
+from ob.run import kernel
+from ob.thr import launch
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre")
@@ -42,12 +42,12 @@ saylock = _thread.allocate_lock()
 class Cfg(Default):
 
     cc = "!"
-    channel = "#krn"
-    nick = "krn"
+    channel = "#ob"
+    nick = "ob"
     port = 6667
     server = "localhost"
-    realname = "python3 runtime library"
-    username = "krn"
+    realname = "python3 object library"
+    username = "ob"
     users = False
 
     def __init__(self, val=None):
@@ -419,7 +419,7 @@ class Users(Object):
 
     def get_users(self, origin=""):
         s = {"user": origin}
-        return find("user", s)
+        return find("om.irc.User", s)
 
     def get_user(self, origin):
         u = list(self.get_users(origin))
@@ -489,7 +489,7 @@ def dlt(event):
         event.reply("dlt <username>")
         return
     selector = {"user": event.args[0]}
-    for fn, o in find("user", selector):
+    for fn, o in find("om.irc.User", selector):
         o._deleted = True
         o.save()
         event.reply("ok")
