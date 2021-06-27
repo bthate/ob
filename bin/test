@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-name = "ob"
-
 import os, sys ; sys.path.insert(0, os.getcwd())
-
-from ob.clt import Client
-from ob.krn import Kernel, wrap
 
 import doctest
 import readline
@@ -15,30 +10,9 @@ import unittest
 
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
 
-class Test(Client):
-
-    def raw(self, txt):
-        if k.opts("v"):
-            cprint(txt)
-
-def cprint(*args):
-    print(*args)
-    sys.stdout.flush()
-
-def error(hdl, obj):
-    cprint(obj.trc)
-
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
-    k = Kernel()
-    k.error = error
-    k.cfg.debug = True
-    k.cfg.p = "om,on,oe"
-    k.boot(name, '.test')
-    k.start()
-    c = Test()
-    c.start()
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)
