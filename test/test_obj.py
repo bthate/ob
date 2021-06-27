@@ -1,17 +1,11 @@
 # This file is placed in the Public Domain.
 
-from ob import O, Object, find, gettype, last
-from ob.run import kernel
-
 import os
 import unittest
 
-k = kernel()
+from ob import O, Object, find, gettype, last
 
 class Test_Object(unittest.TestCase):
-
-    def setUp(self):
-        k.cfg.wd = ".test"
 
     def test_O(self):
         o = O()

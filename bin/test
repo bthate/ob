@@ -4,6 +4,7 @@
 import os, sys ; sys.path.insert(0, os.getcwd())
 
 import doctest
+import ob
 import readline
 import shutil
 import unittest
@@ -13,9 +14,11 @@ flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
 def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
+    ob.wd = ".test"
     pat = "test_%s*" % "*"
     suite = unittest.loader.TestLoader().discover("test", pattern=pat)
     unittest.TextTestRunner(verbosity=3).run(suite)
     doctest.testfile("../test/test1.txt", optionflags=flags, report=False, verbose=False)
 
-wrap(main)
+if __name__ == "__main__":
+    main()
