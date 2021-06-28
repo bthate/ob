@@ -16,9 +16,9 @@ import threading
 import time
 import types
 
-from hdl import Bus, Dispatcher, Handler, Loop
-from prs import parse_txt
-from thr import launch, getname
+from .hdl import Bus, Dispatcher, Handler, Loop
+from .prs import parse_txt
+from .thr import launch, getname
 
 def __dir__():
     return ('Cfg', 'Kernel', 'Repeater', 'Timer', 'launch', 'wrap')
@@ -97,7 +97,7 @@ class Kernel(Dispatcher, Loop):
         parse_txt(o, txt)
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
-        ob.wd = self.cfg.wd or wd or None
+        ob.wd = ob.wd or self.cfg.wd or wd or None
 
     @staticmethod
     def privileges(name=None):
@@ -149,8 +149,6 @@ class Kernel(Dispatcher, Loop):
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])
                 self.introspect(mod)
-                om = zip.get_data(mod.__file__)
-                print(str(om))
                 
     def start(self):
         self.boot()

@@ -5,10 +5,6 @@ import queue
 import sys
 import threading
 
-from ob  import List, Object, spl
-from prs import parse_txt
-from thr import launch
-
 def __dir__():
     return ('Bus', 'Command', 'Dispatcher', 'Event', 'Handler', 'Loop', 'NoBot', 'NotImplemented', 'Restart', 'Stop') 
 
@@ -133,7 +129,7 @@ class Output(ob.Object):
 
     def start(self):
         self.dostop.clear()
-        launch(self.output)
+        ob.launch(self.output)
         return self
 
     def stop(self):
@@ -159,7 +155,7 @@ class Event(ob.Default):
 
     def parse(self):
         if self.txt is not None:
-            parse_txt(self, self.txt)
+            ob.prs.parse_txt(self, self.txt)
 
     def ready(self):
         self.done.set()
@@ -241,7 +237,7 @@ class Loop(ob.Object):
         self.start()
 
     def start(self):
-        launch(self.loop)
+        ob.launch(self.loop)
         return self
 
     def stop(self):
