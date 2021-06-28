@@ -5,8 +5,6 @@ import os
 import ob
 import sys
 
-from test.prm import times
-
 import doctest
 import readline
 import shutil
@@ -34,7 +32,7 @@ def main():
     if os.path.exists(".test"):
         shutil.rmtree(".test")
     k.error = error
-    k.start("test")
+    k.start(".test")
     c = Test()
     c.start()
     pat = "test_%s*" % "*"
@@ -43,8 +41,3 @@ def main():
     doctest.testfile("../test/test1.txt", optionflags=flags, report=False, verbose=False)
 
 ob.run.wrap(main)
-
-nr = 1
-for a in times:
-    print("%s: %s" % (nr, ob.prs.elapsed(a.start-a.end)))
-    nr += 1
