@@ -5,6 +5,8 @@ import queue
 import sys
 import threading
 
+from prs import parse_txt
+
 def __dir__():
     return ('Bus', 'Command', 'Dispatcher', 'Event', 'Handler', 'Loop', 'NoBot', 'NotImplemented', 'Restart', 'Stop') 
 
@@ -155,7 +157,7 @@ class Event(ob.Default):
 
     def parse(self):
         if self.txt is not None:
-            ob.prs.parse_txt(self, self.txt)
+            parse_txt(self, self.txt)
 
     def ready(self):
         self.done.set()

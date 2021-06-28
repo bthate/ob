@@ -6,12 +6,15 @@ import os
 import readline
 import sys
 
+from hdl import Handler
+from run import Kernel, wrap
+
 d = os.path.expanduser("~/.ob")
-k = ob.run.Kernel()
+k = Kernel()
 k.cfg.p = "om"
 k.cfg.m = "om.irc,om.rss"
 
-class Console(ob.hdl.Handler):
+class Console(Handler):
 
     def error(self, e):
         print(e.exc)
@@ -33,4 +36,4 @@ def main():
     c.start()
     k.wait()
 
-ob.run.wrap(main)
+wrap(main)
