@@ -9,6 +9,7 @@ import sys
 d = os.path.expanduser("~/.ob")
 k = ob.run.Kernel()
 k.cfg.p = "om"
+k.cfg.m = "om.irc,om.rss"
 
 class Console(ob.hdl.Handler):
 
