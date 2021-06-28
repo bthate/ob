@@ -4,9 +4,6 @@ import ob
 import socket
 import time
 
-from hdl import Bus
-from thr import launch
-
 def __dir__():
     return ("Cfg", "UDP", "init", "toudp")
 
@@ -38,7 +35,7 @@ class UDP(ob.Object):
         self.cfg = Cfg()
 
     def output(self, txt, addr):
-        Bus.announce(txt.replace("\00", ""))
+        ob.hdl.Bus.announce(txt.replace("\00", ""))
 
     def server(self):
         try:
@@ -56,7 +53,7 @@ class UDP(ob.Object):
 
     def start(self):
         self.cfg.last()
-        launch(self.server)
+        ob.launch(self.server)
 
     def stop(self):
         self.stopped = True

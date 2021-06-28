@@ -4,25 +4,20 @@ import ob
 import threading
 import time
 
-from hdl import Bus
-from prs import elapsed
-from run import kernel
-from thr import getname
-
 def __dir__():
     return ("flt", "krn", "register", "thr", "upt", "ver")
 
-k = kernel()
+k = ob.run.kernel()
 starttime = time.time()
 
 def flt(event):
     try:
         index = int(event.args[0])
-        event.reply(ob.fmt(Bus.objs[index], skip=["queue", "ready", "iqueue"]))
+        event.reply(ob.fmt(ob.hdl.Bus.objs[index], skip=["queue", "ready", "iqueue"]))
         return
     except (TypeError, IndexError):
         pass
-    event.reply(" | ".join([getname(o) for o in Bus.objs]))
+    event.reply(" | ".join([ob.getname(o) for o in ob.hdl.Bus.objs]))
 
 def krn(event):
     k = kernel()
@@ -52,7 +47,7 @@ def thr(event):
             result.append((up, thrname))
     res = []
     for up, txt in sorted(result, key=lambda x: x[0]):
-        res.append("%s(%s)" % (txt, elapsed(up)))
+        res.append("%s(%s)" % (txt, ob.prs.elapsed(up)))
     if res:
         event.reply(" ".join(res))
 

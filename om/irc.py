@@ -9,9 +9,9 @@ import time
 import threading
 import _thread
 
-from hdl import Bus, Dispatcher, Event, Handler, Output
-from run import kernel
-from thr import launch
+from ob.hdl import Bus, Dispatcher, Event, Handler, Output
+from ob.run import kernel
+from ob.thr import launch
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre")

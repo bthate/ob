@@ -5,9 +5,9 @@ import re
 import threading
 import urllib
 
-from hdl import Bus
-from run import Repeater, kernel
-from thr import launch
+from ob.hdl import Bus
+from ob.run import Repeater, kernel
+from ob.thr import launch
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode

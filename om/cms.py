@@ -1,10 +1,10 @@
 # This is file is placed in Public Domain.
 
-from run import kernel
+import ob
 
 def __dir__():
     return ("cmd",)
 
 def cmd(event):
-    k = kernel()
+    k = ob.run.kernel()
     event.reply(",".join(sorted(k.cmds)))

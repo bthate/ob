@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-import os, sys ; sys.path.insert(0, 'lib')
-
+import ob
 import os
 import readline
 import sys
 
-from run import Handler, Kernel, Restart, wrap
-
-k = Kernel()
+d = os.path.expanduser("~/.ob")
+k = ob.run.Kernel()
 k.cfg.p = "om"
-wd = os.path.expanduser("~/.ob")
 
-class Console(Handler):
+class Console(ob.hdl.Handler):
 
     def error(self, e):
         print(e.exc)
@@ -30,9 +27,9 @@ class Console(Handler):
         print(txt)
 
 def main():
-    k.start()
+    k.start(d)
     c = Console()
     c.start()
     k.wait()
 
-wrap(main)
+ob.run.wrap(main)

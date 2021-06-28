@@ -16,12 +16,8 @@ import threading
 import time
 import types
 
-from .hdl import Bus, Dispatcher, Handler, Loop
-from .prs import parse_txt
-from .thr import launch, getname
-
 def __dir__():
-    return ('Cfg', 'Kernel', 'Repeater', 'Timer', 'launch', 'wrap')
+    return ('Cfg', 'Kernel', 'Repeater', 'Timer', 'wrap')
 
 resume = {}
 
@@ -33,11 +29,11 @@ class Cfg(ob.Default):
 
     pass
 
-class Kernel(Dispatcher, Loop):
+class Kernel(ob.hdl.Dispatcher, ob.hdl.Loop):
 
     def __init__(self):
-        Dispatcher.__init__(self)
-        Loop.__init__(self)
+        ob.hdl.Dispatcher.__init__(self)
+        ob.hdl.Loop.__init__(self)
         self.cfg = Cfg()
         self.cmds = ob.Object()
         self.register("cmd", self.handle)
@@ -53,7 +49,7 @@ class Kernel(Dispatcher, Loop):
         self.init(self.cfg.m)
 
     def cmd(self, clt, txt):
-        Bus.add(clt)
+        ob.hdl.Bus.add(clt)
         e = clt.event(txt)
         e.origin = "root@shell"
         self.dispatch(e)
@@ -78,7 +74,7 @@ class Kernel(Dispatcher, Loop):
             mod = sys.modules.get(mn, None)
             i = getattr(mod, "init", None)
             if i:
-                launch(i, self)
+                ob.launch(i, self)
 
     def introspect(self, mod):
         for key, o in inspect.getmembers(mod, inspect.isfunction):
@@ -94,7 +90,7 @@ class Kernel(Dispatcher, Loop):
     def parse_cli(self, wd=""):
         txt = " ".join(sys.argv[1:])
         o = ob.Default()
-        parse_txt(o, txt)
+        ob.prs.parse_txt(o, txt)
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
         ob.wd = ob.wd or self.cfg.wd or wd or None
@@ -172,11 +168,11 @@ class Timer(ob.Object):
 
     def run(self):
         self.state.latest = time.time()
-        launch(self.func, *self.args)
+        ob.launch(self.func, *self.args)
 
     def start(self):
         if not self.name:
-            self.name = getname(self.func)
+            self.name = ob.getname(self.func)
         timer = threading.Timer(self.sleep, self.run)
         timer.setName(self.name)
         timer.setDaemon(True)
@@ -196,7 +192,7 @@ class Timer(ob.Object):
 class Repeater(Timer):
 
     def run(self):
-        thr = launch(self.start)
+        thr = ob.launch(self.start)
         super().run()
         return thr
 
