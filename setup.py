@@ -15,7 +15,7 @@ setup(
     long_description=read(),
     license='Public Domain',
     package_dir={'': 'lib'},
-    py_modules=["ob"],
+    py_modules=['ob',' hdl', 'prs', 'run', 'thr'],
     zip_safe=True,
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: Public Domain',

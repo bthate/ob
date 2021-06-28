@@ -10,7 +10,7 @@ import types
 import uuid
 
 def __dir__():
-    return ('Db', 'Default', 'List', 'O', 'Obj', 'Object', 'cdir', 'fmt', 'gettype', 'spl')
+    return ('Db', 'Default', 'List', 'O', 'Obj', 'Object', 'cdir', 'fmt', 'gettype', 'listfiles', 'spl')
 
 wd = ""
 
@@ -297,7 +297,7 @@ class Db(Object):
             return (None, None)
 
     def lastmatch(self, otype, selector=None, index=None, timed=None):
-        res = sorted(find(otype, selector, index, timed), key=lambda x: fntime(x[0]))
+        res = sorted(self.find(otype, selector, index, timed), key=lambda x: fntime(x[0]))
         if res:
             return res[-1]
         return (None, None)
