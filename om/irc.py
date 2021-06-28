@@ -9,16 +9,15 @@ import time
 import threading
 import _thread
 
-from ob.hdl import Bus, Dispatcher, Event, Handler, Output
-from ob.run import kernel
-from ob.thr import launch
+from hdl import Bus, Dispatcher, Event, Handler, Output
+from run import kernel
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC", "User", "Users", "cfg", "dlt", "init", "locked", "met", "mre")
 
 def init(k):
     i = IRC()
-    launch(i.start)
+    ob.launch(i.start)
     return i
 
 k = kernel()
@@ -317,7 +316,7 @@ class IRC(Output, Handler):
         Output.start(self)
         Bus.add(self)
         if not self.keeprunning:
-            launch(self.keep)
+            ob.launch(self.keep)
         self.wait()
 
     def stop(self):
@@ -457,7 +456,7 @@ def PRIVMSG(clt, obj):
             return
         try:
             dcc = DCC()
-            launch(dcc.connect, obj)
+            ob.launch(dcc.connect, obj)
             return
         except ConnectionError as ex:
             return

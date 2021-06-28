@@ -5,9 +5,8 @@ import re
 import threading
 import urllib
 
-from ob.hdl import Bus
-from ob.run import Repeater, kernel
-from ob.thr import launch
+from hdl import Bus
+from run import Repeater, kernel
 
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
@@ -18,7 +17,7 @@ def __dir__():
 
 def init(k):
     f = Fetcher()
-    launch(f.start)
+    ob.launch(f.start)
     return f
 
 k = kernel()
@@ -108,7 +107,7 @@ class Fetcher(ob.Object):
         db = ob.Db()
         thrs = []
         for fn, o in db.all("mod.rss.Rss"):
-            thrs.append(launch(self.fetch, o))
+            thrs.append(ob.launch(self.fetch, o))
         return thrs
 
     def start(self, repeat=True):
