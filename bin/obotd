@@ -27,7 +27,7 @@ def daemon():
 
 def main():
     daemon()
-    k.start()
+    k.start(d)
     k.wait()
 
 main()
