@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+import os
+import readline
+import sys
+
+from run import Handler, Kernel, Restart, wrap
+
+k = Kernel()
+k.cfg.p = "om"
+wd = os.path.expanduser("~/.ob")
+
+class Console(Handler):
+
+    def error(self, e):
+        print(e.exc)
+        raise Restart
+
+    def handle(self, e):
+        k.put(e)
+        e.wait()
+
+    def poll(self):
+        return input("> ")
+
+    def raw(self, txt):
+        print(txt)
+
+def main():
+    k.start()
+    c = Console()
+    c.start()
+    k.wait()
+
+wrap(main)
