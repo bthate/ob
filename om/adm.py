@@ -20,7 +20,7 @@ def flt(event):
     event.reply(" | ".join([ob.getname(o) for o in ob.hdl.Bus.objs]))
 
 def krn(event):
-    k = kernel()
+    k = ob.run.kernel()
     if not event.args:
         event.reply(ob.fmt(k.cfg, skip=["otxt", "opts", "sets", "old", "res"]))
         return
@@ -52,4 +52,4 @@ def thr(event):
         event.reply(" ".join(res))
 
 def upt(event):
-    event.reply("uptime is %s" % elapsed(time.time() - starttime))
+    event.reply("uptime is %s" % ob.prs.elapsed(time.time() - starttime))

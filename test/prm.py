@@ -3,8 +3,6 @@
 import ob
 import random
 
-from ob.hdl import Bus
-
 events = []
 k = ob.run.kernel()
 
