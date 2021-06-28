@@ -1,11 +1,18 @@
 # This file is placed in the Public Domain.
 
+import ob
 import os
 import unittest
 
 from ob import Db, O, Object, gettype
+from ob.run import kernel
+
+k = kernel()
 
 class Test_Object(unittest.TestCase):
+
+    def setUp(self):
+        ob.wd = ".test"
 
     def test_O(self):
         o = O()
@@ -36,10 +43,10 @@ class Test_Object(unittest.TestCase):
         self.assertTrue(not o)
 
     def test_final(self):
-        with self.assertRaises(TypeError):
-            o = Object()
-            o.last = "bla"
-            o.last()
+        o = Object()
+        o.test = "bla"
+        o.last()
+        self.assertEqual(o.test, "bla")
 
     def test_stamp(self):
         o = Object()
