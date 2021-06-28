@@ -1,19 +1,18 @@
 # This file is placed in the Public Domain.
 
-from obj import Default, Object
-
 import datetime
+import ob
 
 def __dir__():
     return ('day', 'elapsed', 'parse_txt', 'parse_ymd')
 
-class Token(Object):
+class Token(ob.Object):
 
     def __init__(self, txt):
         super().__init__()
         self.txt = txt
 
-class Option(Default):
+class Option(ob.Default):
 
     def __init__(self, txt):
         super().__init__()
@@ -22,7 +21,7 @@ class Option(Default):
         if txt.startswith("-"):
             self.opt = txt[1:]
 
-class Getter(Object):
+class Getter(ob.Object):
 
     def __init__(self, txt):
         super().__init__()
@@ -33,7 +32,7 @@ class Getter(Object):
         if pre:
             self[pre] = post
 
-class Setter(Object):
+class Setter(ob.Object):
 
     def __init__(self, txt):
         super().__init__()
@@ -44,7 +43,7 @@ class Setter(Object):
         if pre:
             self[pre] = post
 
-class Skip(Object):
+class Skip(ob.Object):
 
     def __init__(self, txt):
         super().__init__()
@@ -59,7 +58,7 @@ class Skip(Object):
         if pre:
             self[pre] = True
 
-class Url(Object):
+class Url(ob.Object):
 
     def __init__(self, txt):
         super().__init__()
@@ -115,12 +114,12 @@ def parse_txt(o, ptxt=None):
         raise NoTextError(o)
     o.txt = ptxt
     o.otxt = ptxt
-    o.gets = o.gets or Default()
-    o.opts = o.opts or Default()
+    o.gets = o.gets or ob.Default()
+    o.opts = o.opts or ob.Default()
     o.timed = []
     o.index = None
-    o.sets = o.sets or Default()
-    o.skip = o.skip or Default()
+    o.sets = o.sets or ob.Default()
+    o.skip = o.skip or ob.Default()
     args = []
     for token in [Token(txt) for txt in ptxt.split()]:
         u = Url(token.txt)

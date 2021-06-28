@@ -5,7 +5,7 @@ import builtins
 import getpass
 import importlib
 import inspect
-import obj
+import ob
 import os
 import pkgutil
 import pwd
@@ -17,7 +17,6 @@ import time
 import types
 
 from hdl import Bus, Dispatcher, Handler, Loop
-from obj import Default, Object, cdir, spl
 from prs import parse_txt
 from thr import launch, getname
 
@@ -30,7 +29,7 @@ class Restart(Exception):
 
     pass
 
-class Cfg(Default):
+class Cfg(ob.Default):
 
     pass
 
@@ -40,7 +39,7 @@ class Kernel(Dispatcher, Loop):
         Dispatcher.__init__(self)
         Loop.__init__(self)
         self.cfg = Cfg()
-        self.cmds = Object()
+        self.cmds = ob.Object()
         self.register("cmd", self.handle)
 
     def add(self, func):
@@ -49,7 +48,7 @@ class Kernel(Dispatcher, Loop):
 
     def boot(self):
         self.parse_cli()
-        cdir(self.cfg.wd + os.sep)
+        ob.cdir(self.cfg.wd + os.sep)
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
 
@@ -75,7 +74,7 @@ class Kernel(Dispatcher, Loop):
         obj.ready()
 
     def init(self, mns):
-        for mn in spl(mns):
+        for mn in ob.spl(mns):
             mod = sys.modules.get(mn, None)
             i = getattr(mod, "init", None)
             if i:
@@ -94,12 +93,12 @@ class Kernel(Dispatcher, Loop):
 
     def parse_cli(self, wd=""):
         txt = " ".join(sys.argv[1:])
-        o = Default()
+        o = ob.Default()
         parse_txt(o, txt)
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
         if self.cfg.wd:
-            obj.wd = self.cfg.wd
+            ob.wd = self.cfg.wd
 
     @staticmethod
     def privileges(name=None):
@@ -123,7 +122,7 @@ class Kernel(Dispatcher, Loop):
         except KeyError:
             return False
         try:
-            os.chown(obj.wd, pwn.pw_uid, pwn.pw_gid)
+            os.chown(ob.wd, pwn.pw_uid, pwn.pw_gid)
         except PermissionError:
             pass
         os.setgroups([])
@@ -140,7 +139,7 @@ class Kernel(Dispatcher, Loop):
 
     def scan(self, pkgs=""):
         res = {}
-        for pn in spl(pkgs):
+        for pn in ob.spl(pkgs):
             p = sys.modules.get(pn, None)
             if not p:
                 try:
@@ -161,7 +160,7 @@ class Kernel(Dispatcher, Loop):
         while 1:
             time.sleep(5.0)
 
-class Timer(Object):
+class Timer(ob.Object):
 
     def __init__(self, sleep, func, *args, name=None):
         super().__init__()
@@ -169,7 +168,7 @@ class Timer(Object):
         self.func = func
         self.sleep = sleep
         self.name = name or  ""
-        self.state = Object()
+        self.state = ob.Object()
         self.timer = None
 
     def run(self):

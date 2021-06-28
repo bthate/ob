@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
-import os
+import os, sys ; sys.path.insert(0, 'lib')
+
+import ob
 import readline
 import sys
 
 from run import Handler, Kernel, wrap
 
 k = Kernel()
+k.cfg.path = "/usr/local/share/om"
 k.cfg.p = "om"
-wd = os.path.expanduser("~/.ob")
 
 class CLI(Handler):
 
@@ -21,6 +23,7 @@ class CLI(Handler):
         print(txt)
 
 def main():
+    ob.wd = os.path.expanduser("~/.ob")
     k.start()
     c = CLI()
     k.cmd(c, k.cfg.otxt)
