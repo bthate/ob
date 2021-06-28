@@ -3,8 +3,11 @@
 import ob
 import unittest
 
+from hdl import Bus
+from run import kernel
+
 events = []
-k = ob.run.kernel()
+k = kernel()
 
 param = ob.Object()
 param.add = ["test@shell", "bart", ""]
@@ -26,7 +29,7 @@ param.tdo = ["test4", ""]
 class Test_Commands(unittest.TestCase):
 
     def test_commands(self):
-        c = ob.hdl.Bus.first()
+        c = Bus.first()
         l = list(k.cmds)
         for cmd in l:
             for ex in getattr(param, cmd, [""]):

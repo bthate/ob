@@ -4,8 +4,11 @@ import ob
 import random
 import unittest
 
+from hdl import Bus
+from run import kernel
+
 events = []
-k = ob.run.kernel()
+k = kernel()
 
 param = ob.Object()
 param.add = ["test@shell", "bart", ""]
@@ -49,7 +52,7 @@ def consume():
     return res
 
 def exec():
-    c = ob.hdl.Bus.first()
+    c = Bus.first()
     l = list(k.cmds)
     random.shuffle(l)
     for cmd in l:

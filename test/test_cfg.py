@@ -3,22 +3,21 @@
 import ob
 import unittest
 
-from ob import Default
-from ob.prs import parse_txt
+from prs import parse_txt
 
 cfg = ob.Default()
 
 class Test_Cfg(unittest.TestCase):
 
     def test_parse(self):
-        ob.prs.parse_txt(cfg, "mods=irc")
-        self.assertEqual(cfg.sets.mods, "irc")
+        parse_txt(cfg, 'm=om.irc')
+        self.assertEqual(cfg.sets.m, 'om.irc')
 
     def test_parse2(self):
-        ob.prs.parse_txt(cfg, "mods=irc,udp")
-        self.assertEqual(cfg.sets.mods, "irc,udp")
+        parse_txt(cfg, 'm=om.irc,om.udp,om.rss')
+        self.assertEqual(cfg.sets.m,'om.irc,om.udp,om.rss')
 
     def test_edit(self):
-        d = {"mods": "rss"}
+        d = {'m':'om.rss'}
         cfg.edit(d)
-        self.assertEqual(cfg.mods, "rss")
+        self.assertEqual(cfg.m, "om.rss")

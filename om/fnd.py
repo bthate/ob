@@ -3,6 +3,9 @@
 import ob
 import time
 
+from prs import elapsed
+from run import kernel
+
 def __dir__():
     return ("fnd",)
 
@@ -20,13 +23,13 @@ def fnd(event):
     except IndexError:
         pass
     got = False
-    k = ob.run.kernel()
+    k = kernel()
     db = ob.Db()
     for fn, o in db.find(otype, event.gets, event.index, event.timed):
         nr += 1
         txt = "%s %s" % (str(nr), ob.fmt(o, args or o.keys(), skip=event.skip.keys()))
         if "t" in event.opts:
-            txt = txt + " %s" % (ob.prs.elapsed(time.time() - ob.fntime(fn)))
+            txt = txt + " %s" % (elapsed(time.time() - ob.fntime(fn)))
         got = True
         event.reply(txt)
     if not got:

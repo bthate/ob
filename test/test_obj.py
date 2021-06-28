@@ -5,7 +5,7 @@ import os
 import unittest
 
 from ob import Db, O, Object, gettype
-from ob.run import kernel
+from run import kernel
 
 k = kernel()
 

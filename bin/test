@@ -10,13 +10,16 @@ import readline
 import shutil
 import unittest
 
+from hdl import Handler
+from run import Kernel, wrap
+
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
-k = ob.run.Kernel()
+k = Kernel()
 k.cfg.debug = True
 k.cfg.verbose = True
 k.cfg.p = "om"
 
-class Test(ob.hdl.Handler):
+class Test(Handler):
 
     def handle(self, e):
         k.put(e)
@@ -40,4 +43,4 @@ def main():
     unittest.TextTestRunner(verbosity=3).run(suite)
     doctest.testfile("../test/test1.txt", optionflags=flags, report=False, verbose=False)
 
-ob.run.wrap(main)
+wrap(main)
