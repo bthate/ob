@@ -46,8 +46,8 @@ class Kernel(Dispatcher, Loop):
         n = func.__name__
         self.cmds[n] = func
 
-    def boot(self):
-        self.parse_cli()
+    def boot(self, wd=""):
+        self.parse_cli(wd)
         ob.cdir(self.cfg.wd + os.sep)
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
@@ -150,8 +150,8 @@ class Kernel(Dispatcher, Loop):
                 mod = zip.load_module(mn[1])
                 self.introspect(mod)
                 
-    def start(self):
-        self.boot()
+    def start(self, wd=""):
+        self.boot(wd)
         super().start()
 
     @staticmethod
