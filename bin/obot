@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
+import os, sys ; sys.path.insert(0, 'lib')
+
 import os
 import readline
 import sys

@@ -97,8 +97,7 @@ class Kernel(Dispatcher, Loop):
         parse_txt(o, txt)
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
-        if self.cfg.wd:
-            ob.wd = self.cfg.wd
+        ob.wd = self.cfg.wd or wd or None
 
     @staticmethod
     def privileges(name=None):
@@ -150,6 +149,8 @@ class Kernel(Dispatcher, Loop):
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])
                 self.introspect(mod)
+                om = zip.get_data(mod.__file__)
+                print(str(om))
                 
     def start(self):
         self.boot()
