@@ -16,7 +16,7 @@ def dne(clt, event):
         event.reply("dne txt==<string>")
         return
     db = ob.Db()
-    for fn, o in db.find("mod.tdo.Todo", event.gets):
+    for fn, o in db.find("om.tdo.Todo", event.gets):
         o._deleted = True
         o.save()
         event.reply("ok")

@@ -106,7 +106,7 @@ class Fetcher(ob.Object):
     def run(self):
         db = ob.Db()
         thrs = []
-        for fn, o in db.all("mod.rss.Rss"):
+        for fn, o in db.all("om.rss.Rss"):
             thrs.append(ob.launch(self.fetch, o))
         return thrs
 
@@ -182,7 +182,7 @@ def dpl(event):
         return
     db = ob.Db()
     setter = {"display_list": event.args[1]}
-    fn, o = db.lastmatch("mod.rss.Rss", {"rss": event.args[0]})
+    fn, o = db.lastmatch("om.rss.Rss", {"rss": event.args[0]})
     if o:
         o.edit(setter)
         o.save()
@@ -209,7 +209,7 @@ def rem(event):
     selector = {"rss": event.args[0]}
     nr = 0
     got = []
-    for fn, o in db.find("mod.rss.Rss", selector):
+    for fn, o in db.find("om.rss.Rss", selector):
         nr += 1
         o._deleted = True
         got.append(o)
@@ -223,7 +223,7 @@ def rss(event):
         return
     db = ob.Db()
     url = event.args[0]
-    res = list(db.find("mod.rss.Rss", {"rss": url}))
+    res = list(db.find("om.rss.Rss", {"rss": url}))
     if res:
         return
     o = Rss()

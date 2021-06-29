@@ -419,7 +419,7 @@ class Users(ob.Object):
     def get_users(self, origin=""):
         db = Db()
         s = {"user": origin}
-        return db.find("mod.irc.User", s)
+        return db.find("om.irc.User", s)
 
     def get_user(self, origin):
         u = list(self.get_users(origin))
