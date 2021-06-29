@@ -10,16 +10,15 @@ import readline
 import shutil
 import unittest
 
-from hdl import Handler
-from run import Kernel, wrap
-
 flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
-k = Kernel()
+k = ob.Kernel()
 k.cfg.debug = True
 k.cfg.verbose = True
 k.cfg.p = "om"
 
-class Test(Handler):
+from om.csl import wrap
+
+class Test(ob.Handler):
 
     def handle(self, e):
         k.put(e)

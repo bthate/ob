@@ -4,8 +4,7 @@ import ob
 import os
 import unittest
 
-from ob import Db, O, Object, gettype
-from run import kernel
+from ob import Db, O, Object, gettype, kernel
 
 k = kernel()
 

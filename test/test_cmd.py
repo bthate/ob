@@ -3,13 +3,12 @@
 import ob
 import unittest
 
-from hdl import Bus
-from run import kernel
+from ob import Object, Bus, kernel
 
 events = []
 k = kernel()
 
-param = ob.Object()
+param = Object()
 param.add = ["test@shell", "bart", ""]
 param.cfg = ["cfg server=localhost", "cfg", ""]
 param.dne = ["test4", ""]

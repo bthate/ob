@@ -3,9 +3,9 @@
 import ob
 import unittest
 
-from prs import parse_txt
+from ob import Default, parse_txt
 
-cfg = ob.Default()
+cfg = Default()
 
 class Test_Cfg(unittest.TestCase):
 

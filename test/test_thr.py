@@ -4,8 +4,7 @@ import ob
 import random
 import unittest
 
-from hdl import Bus
-from run import kernel
+from ob import Bus, kernel
 
 events = []
 k = kernel()

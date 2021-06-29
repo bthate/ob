@@ -4,9 +4,7 @@ import ob
 import threading
 import time
 
-from hdl import Bus
-from prs import elapsed
-from run import kernel
+from ob import Bus, elapsed, kernel
 
 def __dir__():
     return ("flt", "krn", "register", "thr", "upt", "ver")
