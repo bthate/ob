@@ -89,7 +89,7 @@ class O:
             return iter(oo)
         if isinstance(oo, (type(str), type(True), type(False), type(int), type(float))):
             return oo
-        return repr(oo)
+        return self.__dorepr__(oo)
 
     def __dorepr__(self):
         return '<%s.%s object at %s>' % (
