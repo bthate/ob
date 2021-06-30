@@ -7,7 +7,7 @@ def read():
 
 setup(
     name='ob',
-    version='104',
+    version='111',
     description="python3 object library",
     author='Bart Thate',
     author_email='bthate67@gmail.com', 
@@ -15,7 +15,7 @@ setup(
     long_description=read(),
     license='Public Domain',
     py_modules=["ob"],
-    zip_safe=False,
+    zip_safe=True,
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: Public Domain',
                  'Operating System :: Unix',
