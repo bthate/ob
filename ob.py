@@ -505,7 +505,7 @@ class Bus(Object):
     @staticmethod
     def byorig(orig):
         for o in Bus.objs:
-            if o.__dorepr__() == orig:
+            if Object.__dorepr__(o) == orig:
                 return o
 
     @staticmethod
@@ -536,7 +536,7 @@ class Bus(Object):
     @staticmethod
     def say(orig, channel, txt):
         for o in Bus.objs:
-            if o.__dorepr__() == orig:
+            if Object.__dorepr__(o) == orig:
                 o.say(channel, txt)
 
 class Dispatcher(Object):
@@ -718,7 +718,7 @@ class Handler(Dispatcher, Loop):
             return
         c = Command()
         c.txt = txt or ""
-        c.orig = self.__dorepr__()
+        c.orig = Object.__dorepr__(self)
         return c
 
     def handle(self, e):
