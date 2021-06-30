@@ -123,9 +123,6 @@ class O:
     def __repr__(self):
         return js.dumps(self, default=self.__default__)
      
-    def __repr__(self):
-        return '%s' % repr(self.__dict__)[1:-1]
-
     def __str__(self):
         return str(self.__dict__)
 

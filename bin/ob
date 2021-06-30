@@ -3,13 +3,24 @@
 
 "python3 object library"
 
+import os, sys
+sys.path.insert(0, os.getcwd())
+sys.path.insert(0, "lib")
+
 import atexit
 import ob
 import os
 import sys
 import termios
 
-k = ob.Kernel()
+ob.wd = os.path.expanduser("~/.ob")
+
+from ob import Handler, Kernel
+
+k = Kernel()
+k.cfg.p = "om"
+k.cfg.m = ""
+
 resume = {}
 
 def init(k):
@@ -17,7 +28,7 @@ def init(k):
     ob.launch(c.start)
     return
 
-class CLI(ob.Handler):
+class CLI(Handler):
 
     def error(self, e):
         print(e.exc)
@@ -74,10 +85,7 @@ def wrap(func):
         termreset()
 
 def main():
-    d = os.path.expanduser("~/.ob")
-    k.cfg.p = "om"
-    k.cfg.m = ""
-    k.start(d)
+    k.start()
     if k.cfg.txt:
        cli = CLI()
        return k.cmd(cli, k.cfg.otxt)
