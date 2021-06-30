@@ -89,13 +89,14 @@ class O:
             return iter(oo)
         if isinstance(oo, (type(str), type(True), type(False), type(int), type(float))):
             return oo
-        return self.__dorepr__(oo)
+        return O.__dorepr__(oo)
 
-    def __dorepr__(self):
+    @staticmethod
+    def __dorepr__(o):
         return '<%s.%s object at %s>' % (
-            self.__class__.__module__,
-            self.__class__.__name__,
-            hex(id(self))
+            o.__class__.__module__,
+            o.__class__.__name__,
+            hex(id(o))
         )
     def __delitem__(self, k):
         if k in self:
