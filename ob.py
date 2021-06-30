@@ -24,7 +24,7 @@ import types
 import uuid
 
 resume = {}
-wd = ""
+wd = ".ob"
 
 class Restart(Exception):
 
@@ -1138,45 +1138,3 @@ def parse_ymd(daystr):
             valstr += c
         total += val
     return total
-
-def termsetup(fd):
-    return termios.tcgetattr(fd)
-
-def termreset():
-    if "old" in resume:
-        try:
-            termios.tcsetattr(resume["fd"], termios.TCSADRAIN, resume["old"])
-        except termios.error:
-            pass
-
-def termsave():
-    try:
-        resume["fd"] = sys.stdin.fileno()
-        resume["old"] = termsetup(sys.stdin.fileno())
-        atexit.register(termreset)
-    except termios.error:
-        pass
-
-def wrap(func):
-    termsave()
-    try:
-        func()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        termreset()
-
-def main():
-    d = os.path.expanduser("~/.ob")
-    k.cfg.p = "om"
-    k.cfg.m = "om.irc,om.rss"
-    k.start(d)
-    if k.cfg.txt:
-       cli = CLI()
-       return k.cmd(cli, k.cfg.otxt)
-    c = Console()
-    c.start()
-    k.wait()
-
-if __name__ == '__main__':
-    wrap(main)
