@@ -14,9 +14,7 @@ flags = doctest.REPORT_NDIFF|doctest.FAIL_FAST|doctest.ELLIPSIS
 k = ob.Kernel()
 k.cfg.debug = True
 k.cfg.verbose = True
-k.cfg.p = "om"
-
-from om.csl import wrap
+k.cfg.p = ""
 
 class Test(ob.Handler):
 
@@ -42,4 +40,4 @@ def main():
     unittest.TextTestRunner(verbosity=3).run(suite)
     doctest.testfile("../test/test1.txt", optionflags=flags, report=False, verbose=False)
 
-wrap(main)
+main()
