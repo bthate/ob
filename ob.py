@@ -120,6 +120,9 @@ class O:
     def __repr__(self):
         return js.dumps(self, default=self.__default__)
 
+    def __repr__(self):
+        return repr(self.__dict__)
+
     def __str__(self):
         return str(self.__dict__)
 
@@ -1159,7 +1162,6 @@ def wrap(func):
         pass
     finally:
         termreset()
-
 
 def main():
     d = os.path.expanduser("~/.ob")
