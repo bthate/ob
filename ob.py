@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
 "python3 object library"
