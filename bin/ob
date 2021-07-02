@@ -96,18 +96,24 @@ def wrap(func):
         termreset()
 
 def main():
+    if "-d" in sys.argv:
+        daemon()
+        k.boot()
+        k.writepid()
+        k.start()
+        k.wait()
+        k.removepid()
+        return
     k.parse_cli()
-    if k.opts("k"):
-        k.kill()
+    if k.opts("s"):
+        k.cfg.save()
     elif k.cfg.txt:
         k.boot()
         k.start()
         cli = CLI()
-        return k.cmd(cli, k.cfg.otxt)
-    elif k.opts("d"):
-        daemon()
-        k.daemon()
-        k.wait()
+        k.cmd(cli, k.cfg.otxt)
+    elif k.opts("k"):
+        k.kill()
     elif k.opts("c") or k.cfg.m:
         k.boot()
         k.start()

@@ -771,11 +771,6 @@ class Kernel(Dispatcher, Loop):
         self.dispatch(e)
         e.wait()
 
-    def daemon(self):
-        self.writepid()
-        self.privileges()
-        self.start()
-
     def do(self, e):
         self.dispatch(e)
 
@@ -784,8 +779,10 @@ class Kernel(Dispatcher, Loop):
 
     def getpid(self):
         assert wd
-        f = open(os.path.join(wd, "pidfile"), "r")
-        return int(f.read(1024).strip())
+        d = os.path.join(wd, "pidfile")
+        if os.path.exists(d):
+            f = open(d, "r")
+            return int(f.read(1024).strip())
       
     def handle(self, hdl, obj):
         obj.parse()
@@ -859,6 +856,13 @@ class Kernel(Dispatcher, Loop):
         os.setuid(pwnam.pw_uid)
         old_umask = os.umask(0o22)
         return True
+
+    def removepid(self):
+        assert wd
+        os.remove(os.path.join(wd, 'pidfile'))
+
+    def readkernel(self):
+        self.cfg.last()
 
     @staticmethod
     def root():

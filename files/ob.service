@@ -10,8 +10,8 @@ DynamicUser=True
 StateDirectory=ob
 LogsDirectory=ob
 CacheDirectory=ob
-ExecStart=/usr/local/bin/ob -d
-ExecStop=/usr/local/bin/ob -s
+ExecStart=/usr/local/bin/ob m=on.irc,on.rss -d
+ExecStop=/usr/local/bin/ob -k
 CapabilityBoundingSet=CAP_NET_RAW
 
 [Install]
