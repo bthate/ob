@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 
-"python3 object library"
+"python3 runtime library"
 
 import atexit
 import builtins
@@ -313,7 +313,6 @@ class Repeater(Timer):
         thr = launch(self.start)
         super().run()
         return thr
-
 
 class Db(Object):
 
@@ -761,7 +760,6 @@ class Kernel(Dispatcher, Loop):
         self.cmds[n] = func
 
     def boot(self, wd=""):
-        self.parse_cli(wd)
         cdir(self.cfg.wd + os.sep)
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
@@ -791,6 +789,7 @@ class Kernel(Dispatcher, Loop):
         for mn in spl(mns):
             mod = sys.modules.get(mn, None)
             i = getattr(mod, "init", None)
+            print(i)
             if i:
                 launch(i, self)
 
@@ -854,11 +853,6 @@ class Kernel(Dispatcher, Loop):
         res = {}
         for pn in spl(pkgs):
             p = sys.modules.get(pn, None)
-            if not p:
-                try:
-                    p = __import__(pn)
-                except ModuleNotFoundError:
-                    continue
             for mn in pkgutil.walk_packages(p.__path__, pn+"."):
                 zip = mn[0].find_module(mn[1])
                 mod = zip.load_module(mn[1])
@@ -872,37 +866,6 @@ class Kernel(Dispatcher, Loop):
     def wait():
         while 1:
             time.sleep(5.0)
-
-k = Kernel()
-
-class CLI(Handler):
-
-    def error(self, e):
-        print(e.exc)
-        raise Restart
-
-    def handle(self, e):
-        k.put(e)
-        e.wait()
-
-    def raw(self, txt):
-        print(txt)
-
-class Console(CLI):
-
-    def error(self, e):
-        print(e.exc)
-        raise Restart
-
-    def handle(self, e):
-        k.put(e)
-        e.wait()
-
-    def poll(self):
-        return input("> ")
-
-    def raw(self, txt):
-        print(txt)
 
 def day():
     return str(datetime.datetime.today()).split()[0]

@@ -4,18 +4,19 @@
 "python3 object library"
 
 import os, sys
-sys.path.insert(0, os.getcwd())
-sys.path.insert(0, "lib")
+#sys.path.insert(0, os.getcwd())
+#sys.path.insert(0, "lib")
 
 import atexit
 import ob
+import om
 import os
 import sys
 import termios
 
 ob.wd = os.path.expanduser("~/.ob")
 
-from ob import Handler, Kernel
+from ob import Restart, Handler, Kernel, launch
 
 k = Kernel()
 k.cfg.p = "om"
@@ -23,28 +24,32 @@ k.cfg.m = ""
 
 resume = {}
 
+def cprint(*args):
+    print(*args)
+    sys.stdout.flush()
+
 def init(k):
     c = Console()
-    ob.launch(c.start)
+    launch(c.start)
     return
 
 class CLI(Handler):
 
     def error(self, e):
-        print(e.exc)
-        raise ob.Restart
+        cprint(e.exc)
+        raise Restart
 
     def handle(self, e):
         k.put(e)
         e.wait()
 
     def raw(self, txt):
-        print(txt)
+        cprint(txt)
 
-class Console(ob.CLI):
+class Console(CLI):
 
     def error(self, e):
-        print(e.exc)
+        cprint(e.exc)
         raise Restart
 
     def handle(self, e):
@@ -55,7 +60,21 @@ class Console(ob.CLI):
         return input("> ")
 
     def raw(self, txt):
-        print(txt)
+        cprint(txt)
+
+def daemon():
+    pid = os.fork()
+    if pid != 0:
+        termreset()
+        os._exit(0)
+    os.setsid()
+    os.umask(0)
+    si = open("/dev/null", 'r')
+    so = open("/dev/null", 'a+')
+    se = open("/dev/null", 'a+')
+    os.dup2(si.fileno(), sys.stdin.fileno())
+    os.dup2(so.fileno(), sys.stdout.fileno())
+    os.dup2(se.fileno(), sys.stderr.fileno())
 
 def termsetup(fd):
     return termios.tcgetattr(fd)
@@ -85,13 +104,24 @@ def wrap(func):
         termreset()
 
 def main():
-    k.start()
+    k.parse_cli()
     if k.cfg.txt:
-       cli = CLI()
-       return k.cmd(cli, k.cfg.otxt)
-    if k.cfg.m:
-       csl = Console()
-       csl.start()
-       k.wait()
+        k.boot()
+        k.start()
+        cli = CLI()
+        return k.cmd(cli, k.cfg.otxt)
+    if k.opts("d"):
+        k.boot()
+        daemon()
+        k.privileges()
+        k.start()
+        return k.wait()
+    if k.opts("c"):
+        k.boot()
+        k.start()
+        csl = Console()
+        csl.start()
+    if k.opts("cd"):
+        k.wait()
 
 wrap(main)
