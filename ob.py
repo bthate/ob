@@ -789,7 +789,6 @@ class Kernel(Dispatcher, Loop):
         for mn in spl(mns):
             mod = sys.modules.get(mn, None)
             i = getattr(mod, "init", None)
-            print(i)
             if i:
                 launch(i, self)
 

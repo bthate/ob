@@ -8,7 +8,8 @@ sys.path.insert(0, os.getcwd())
 
 import atexit
 import ob
-import om
+import om.all
+import on.all
 import os
 import sys
 import termios
@@ -18,7 +19,7 @@ ob.wd = os.path.expanduser("~/.ob")
 from ob import Restart, Handler, Kernel, launch
 
 k = Kernel()
-k.cfg.p = "om"
+k.cfg.p = "om,on"
 k.cfg.m = ""
 
 resume = {}
@@ -110,6 +111,7 @@ def main():
         cli = CLI()
         return k.cmd(cli, k.cfg.otxt)
     if k.opts("d"):
+        k.cfg.m += ",on.irc,on.rss,on.udp"
         k.boot()
         daemon()
         k.privileges()
