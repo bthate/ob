@@ -772,11 +772,9 @@ class Kernel(Dispatcher, Loop):
         e.wait()
 
     def daemon(self):
-        daemon()
-        k.writepid()
-        k.privileges()
-        k.start()
-        k.wait()
+        self.writepid()
+        self.privileges()
+        self.start()
 
     def do(self, e):
         self.dispatch(e)

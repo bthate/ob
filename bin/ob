@@ -5,8 +5,6 @@
 
 import atexit
 import ob
-import om.all
-import on.all
 import os
 import sys
 import termios
@@ -15,20 +13,17 @@ ob.wd = os.path.expanduser("~/.ob")
 
 from ob import Restart, Handler, Kernel, launch
 
+import om.all
+import on.all
+
 k = Kernel()
 k.cfg.p = "om,on"
 k.cfg.m = ""
-
 resume = {}
 
 def cprint(*args):
     print(*args)
     sys.stdout.flush()
-
-def init(k):
-    c = Console()
-    launch(c.start)
-    return
 
 class CLI(Handler):
 
@@ -103,20 +98,21 @@ def wrap(func):
 def main():
     k.parse_cli()
     if k.opts("k"):
-        return k.kill()
-    if k.cfg.txt:
+        k.kill()
+    elif k.cfg.txt:
         k.boot()
         k.start()
         cli = CLI()
         return k.cmd(cli, k.cfg.otxt)
-    if k.opts("d"):
-        k.boot()
-        return k.daemon()
-    if k.opts("c") or k.cfg.m:
+    elif k.opts("d"):
+        daemon()
+        k.daemon()
+        k.wait()
+    elif k.opts("c") or k.cfg.m:
         k.boot()
         k.start()
         csl = Console()
         csl.start()
-        return k.wait()
+        k.wait()
 
 wrap(main)
