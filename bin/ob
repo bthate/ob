@@ -105,6 +105,8 @@ def wrap(func):
 
 def main():
     k.parse_cli()
+    if k.opts("k"):
+        return k.kill()
     if k.cfg.txt:
         k.boot()
         k.start()
@@ -113,6 +115,7 @@ def main():
     if k.opts("d"):
         k.cfg.m += ",on.irc,on.rss,on.udp"
         k.boot()
+        k.writepid()
         daemon()
         k.privileges()
         k.start()

@@ -777,6 +777,10 @@ class Kernel(Dispatcher, Loop):
     def error(self, e):
         pass
 
+    def getpid(self):
+        f = open(os.path.join(self.cfg.wd, "pidfile"), "r")
+        return int(f.read(1024).strip())
+      
     def handle(self, hdl, obj):
         obj.parse()
         f = self.cmds.get(obj.cmd, None)
@@ -797,6 +801,14 @@ class Kernel(Dispatcher, Loop):
             if o.__code__.co_argcount == 1 and "event" in o.__code__.co_varnames:
                 self.cmds[o.__name__] = o
 
+    def kill(self):
+        pid = self.getpid()
+        if pid:
+            try:
+                os.kill(9, pid)
+            except OSError:
+                pass
+
     def opts(self, ops):
         for opt in ops:
             if opt in self.cfg.opts:
@@ -810,7 +822,7 @@ class Kernel(Dispatcher, Loop):
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
         wd = wd or self.cfg.wd or wd or None
-
+        
     @staticmethod
     def privileges(name=None):
         if os.getuid() != 0:
@@ -865,6 +877,12 @@ class Kernel(Dispatcher, Loop):
     def wait():
         while 1:
             time.sleep(5.0)
+
+    def writepid(self):
+        f = open(os.path.join(self.cfg.wd, "pidfile"), "w")
+        f.write(str(os.getpid()))
+        f.flush()
+        f.close()
 
 def day():
     return str(datetime.datetime.today()).split()[0]
