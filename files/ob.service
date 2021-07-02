@@ -1,0 +1,18 @@
+[Unit]
+Description=OB - 24/7 channel daemon
+After=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+StandardOutput=journal
+DynamicUser=True
+StateDirectory=ob
+LogsDirectory=ob
+CacheDirectory=ob
+ExecStart=/usr/local/bin/ob -d
+ExecStop=/usr/local/bin/ob -s
+CapabilityBoundingSet=CAP_NET_RAW
+
+[Install]
+WantedBy=multi-user.target

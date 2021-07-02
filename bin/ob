@@ -3,9 +3,6 @@
 
 "python3 object library"
 
-import os, sys
-sys.path.insert(0, os.getcwd())
-
 import atexit
 import ob
 import om.all
@@ -113,19 +110,13 @@ def main():
         cli = CLI()
         return k.cmd(cli, k.cfg.otxt)
     if k.opts("d"):
-        k.cfg.m += ",on.irc,on.rss,on.udp"
         k.boot()
-        k.writepid()
-        daemon()
-        k.privileges()
-        k.start()
-        return k.wait()
-    if k.opts("c"):
+        return k.daemon()
+    if k.opts("c") or k.cfg.m:
         k.boot()
         k.start()
         csl = Console()
         csl.start()
-    if k.opts("cd"):
-        k.wait()
+        return k.wait()
 
 wrap(main)

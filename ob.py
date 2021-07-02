@@ -23,7 +23,7 @@ import types
 import uuid
 
 resume = {}
-wd = ".ob"
+wd = ""
 
 class Restart(Exception):
 
@@ -759,7 +759,7 @@ class Kernel(Dispatcher, Loop):
         n = func.__name__
         self.cmds[n] = func
 
-    def boot(self, wd=""):
+    def boot(self):
         cdir(self.cfg.wd + os.sep)
         self.scan(self.cfg.p)
         self.init(self.cfg.m)
@@ -771,6 +771,13 @@ class Kernel(Dispatcher, Loop):
         self.dispatch(e)
         e.wait()
 
+    def daemon(self):
+        daemon()
+        k.writepid()
+        k.privileges()
+        k.start()
+        k.wait()
+
     def do(self, e):
         self.dispatch(e)
 
@@ -778,7 +785,8 @@ class Kernel(Dispatcher, Loop):
         pass
 
     def getpid(self):
-        f = open(os.path.join(self.cfg.wd, "pidfile"), "r")
+        assert wd
+        f = open(os.path.join(wd, "pidfile"), "r")
         return int(f.read(1024).strip())
       
     def handle(self, hdl, obj):
@@ -821,7 +829,7 @@ class Kernel(Dispatcher, Loop):
         parse_txt(o, txt)
         self.cfg.update(o)
         self.cfg.update(self.cfg.sets)
-        wd = wd or self.cfg.wd or wd or None
+        wd = wd or self.cfg.wd or None
         
     @staticmethod
     def privileges(name=None):
@@ -869,17 +877,14 @@ class Kernel(Dispatcher, Loop):
                 mod = zip.load_module(mn[1])
                 self.introspect(mod)
                 
-    def start(self, wd=""):
-        self.boot(wd)
-        super().start()
-
     @staticmethod
     def wait():
         while 1:
             time.sleep(5.0)
 
     def writepid(self):
-        f = open(os.path.join(self.cfg.wd, "pidfile"), "w")
+        assert wd
+        f = open(os.path.join(wd, "pidfile"), "w")
         f.write(str(os.getpid()))
         f.flush()
         f.close()
