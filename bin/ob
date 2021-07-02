@@ -4,8 +4,7 @@
 "python3 object library"
 
 import os, sys
-#sys.path.insert(0, os.getcwd())
-#sys.path.insert(0, "lib")
+sys.path.insert(0, os.getcwd())
 
 import atexit
 import ob
